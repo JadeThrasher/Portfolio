@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Activate Games — Case Study · Jade Savoia</title>
+<meta name="description" content="Creating clarity through exploration — a discovery & strategy case study for Activate Games by Jade Savoia.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--bg); color: var(--fg);
+    font-family: var(--font-body); font-size: var(--fs-body); line-height: var(--lh-normal);
+    -webkit-font-smoothing: antialiased; overflow-x: hidden;
+  }
+  a { color: inherit; }
+  img { max-width: 100%; display: block; }
+
+  .wrap { max-width: var(--container); margin: 0 auto; padding-inline: var(--gutter); }
+  .narrow { max-width: 860px; margin-inline: auto; }
+  h1,h2,h3,h4 { font-family: var(--font-display); font-weight: var(--fw-medium); line-height: var(--lh-tight); letter-spacing: var(--tracking-tight); margin: 0; }
+  .section-label, .eyebrow {
+    font-family: var(--font-mono); font-size: var(--fs-caption); letter-spacing: var(--tracking-wide);
+    text-transform: uppercase; color: var(--color-ink-muted); margin: 0 0 var(--space-4); display: block;
+  }
+  .eyebrow { color: var(--accent); }
+  p { margin: 0 0 var(--space-4); }
+
+  /* ---------- NAV ---------- */
+  nav.top {
+    position: fixed; top: 0; left: 0; right: 0; z-index: var(--z-nav);
+    background: color-mix(in srgb, var(--bg) 80%, transparent);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid transparent; transition: border-color var(--dur-base) var(--ease-soft);
+  }
+  nav.top.scrolled { border-bottom-color: var(--color-line); }
+  nav.top .wrap { display: flex; align-items: center; justify-content: space-between; padding-block: var(--space-4); }
+  nav.top .brand { display: flex; align-items: center; gap: var(--space-6); }
+  nav.top .logo { font-family: var(--font-display); font-weight: var(--fw-bold); font-size: 1.15rem; letter-spacing: -0.03em; text-decoration: none; color: var(--fg); }
+  nav.top .back { font-family: var(--font-mono); font-size: var(--fs-caption); letter-spacing: 0.06em; text-transform: uppercase; color: var(--color-ink-muted); text-decoration: none; display: inline-flex; align-items: center; gap: var(--space-2); transition: color var(--dur-fast); }
+  nav.top .back:hover { color: var(--accent); }
+  nav.top .links { display: flex; gap: var(--space-8); }
+  nav.top .links a { color: var(--fg-soft); text-decoration: none; font-size: var(--fs-small); position: relative; transition: color var(--dur-fast); }
+  nav.top .links a::after { content:""; position:absolute; left:0; bottom:-4px; width:0; height:1.5px; background:var(--accent); transition: width var(--dur-base) var(--ease-out); }
+  nav.top .links a:hover { color: var(--accent); }
+  nav.top .links a:hover::after { width:100%; }
+  @media (max-width: 640px){ nav.top .back span.lbl { display:none; } nav.top .links { gap: var(--space-4); } }
+
+  /* ---------- HERO ---------- */
+  .case-hero { padding-top: calc(var(--space-32) + var(--space-8)); padding-bottom: var(--space-16); text-align: center; }
+  .case-hero .eyebrow { margin-bottom: var(--space-6); }
+  .case-hero h1 { font-size: clamp(1.9rem, 1rem + 3.6vw, 3.6rem); max-width: 20ch; margin: 0 auto var(--space-6); font-weight: var(--fw-medium); }
+  .case-hero .lead { font-size: var(--fs-lead); color: var(--fg-soft); max-width: 60ch; margin: 0 auto; line-height: var(--lh-snug); }
+  .hero-shot {
+    margin-top: var(--space-16); aspect-ratio: 16/8; border-radius: var(--radius-lg); overflow: hidden;
+    background: linear-gradient(135deg, var(--color-peri-500), var(--color-green-300) 60%, var(--color-clay-300));
+    box-shadow: var(--shadow-lg); position: relative;
+  }
+  .ph-label {
+    position: absolute; left: var(--space-6); bottom: var(--space-6); color:#fff;
+    font-family: var(--font-mono); font-size: var(--fs-caption); letter-spacing: var(--tracking-wide);
+    text-transform: uppercase; background: rgba(38,34,25,0.34); padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-pill); backdrop-filter: blur(4px);
+  }
+
+  /* ---------- META BAR ---------- */
+  .meta-bar { border-block: 1px solid var(--color-line); }
+  .meta-bar .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--space-8); padding-block: var(--space-8); }
+  .meta-bar .cell .k { font-family: var(--font-mono); font-size: var(--fs-caption); letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-ink-muted); display:block; margin-bottom: var(--space-2); }
+  .meta-bar .cell .v { font-size: var(--fs-small); color: var(--fg); }
+  @media (max-width: 760px){ .meta-bar .grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-6); } }
+
+  /* ---------- SECTIONS ---------- */
+  section { padding-block: var(--space-24); }
+  .phase-head { text-align: center; padding-block: var(--space-24); }
+  .phase-head h2 { font-size: clamp(2rem, 1.2rem + 3vw, 3.25rem); font-weight: var(--fw-medium); }
+  .phase-head .section-label { color: var(--accent); }
+  .phase-head.alt { background: color-mix(in srgb, var(--color-green-100) 50%, var(--color-paper)); border-block: 1px solid var(--color-line); }
+
+  h2.sec { font-size: clamp(1.6rem, 1.1rem + 2vw, 2.4rem); font-weight: var(--fw-medium); margin-bottom: var(--space-8); }
+  h3.sub { font-size: var(--fs-h3); font-weight: var(--fw-semibold); margin-bottom: var(--space-4); }
+
+  /* two-col */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-16); align-items: start; }
+  .two-col.lean { grid-template-columns: 1.2fr 1fr; }
+  @media (max-width: 860px){ .two-col, .two-col.lean { grid-template-columns: 1fr; gap: var(--space-12); } }
+  .prose p { color: var(--fg-soft); max-width: 56ch; }
+
+  /* lists */
+  ul.ul { list-style: none; margin: 0 0 var(--space-4); padding: 0; }
+  ul.ul li { position: relative; padding-left: var(--space-6); color: var(--fg-soft); margin-bottom: var(--space-2); }
+  ul.ul li::before { content:""; position:absolute; left:0; top:0.62em; width:6px; height:6px; border-radius:50%; background: var(--accent-2-bright); }
+
+  /* panel */
+  .panel { background: var(--color-surface); border:1px solid var(--color-line); border-radius: var(--radius-lg); padding: var(--space-8); }
+  .panel + .panel { margin-top: var(--space-6); }
+  .cards-3 .panel + .panel { margin-top: 0; }
+  .panel h3 { font-size: var(--fs-h4); font-weight: var(--fw-semibold); margin-bottom: var(--space-4); }
+  .panel .section-label { color: var(--accent); }
+
+  /* note / constraint */
+  .note { border-left: 3px solid var(--accent); padding-left: var(--space-6); }
+  .note p { color: var(--fg-soft); margin: 0; }
+
+  /* statement / pull quote */
+  .statement-block { text-align: center; }
+  .statement-block p { margin: 0; font-family: var(--font-display); font-weight: var(--fw-regular); font-size: clamp(1.4rem, 1rem + 1.6vw, 2.1rem); line-height: var(--lh-snug); color: var(--fg); letter-spacing: -0.02em; max-width: 34ch; margin-inline: auto; }
+  .pull-quote { text-align: center; }
+  .pull-quote blockquote { margin: 0; font-family: var(--font-display); font-weight: var(--fw-regular); font-size: clamp(1.4rem, 1rem + 1.6vw, 2.1rem); line-height: var(--lh-snug); letter-spacing: -0.02em; max-width: 34ch; margin-inline: auto; }
+  .pull-quote cite { display:block; margin-top: var(--space-8); font-style: normal; font-family: var(--font-mono); font-size: var(--fs-caption); text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-ink-muted); }
+
+  /* 3-up cards */
+  .cards-3 { display:grid; grid-template-columns: repeat(3,1fr); gap: var(--space-6); }
+  @media (max-width: 860px){ .cards-3 { grid-template-columns:1fr; } }
+  .proc { border:1px solid var(--color-line); border-radius: var(--radius-lg); padding: var(--space-8); background: var(--color-surface); }
+  .proc .step { font-family: var(--font-mono); font-size: var(--fs-caption); text-transform:uppercase; letter-spacing:0.08em; color: var(--accent); margin-bottom: var(--space-3); display:block; }
+  .proc h3 { font-size: var(--fs-h4); font-weight: var(--fw-semibold); margin-bottom: var(--space-4); }
+  .proc p { color: var(--fg-soft); margin: 0; }
+
+  /* finding cards */
+  .finding .n { font-family: var(--font-display); font-weight: var(--fw-medium); font-size: var(--fs-h2); color: var(--accent); line-height:1; display:block; margin-bottom: var(--space-3); }
+  .finding p { color: var(--fg-soft); }
+
+  /* methods grid */
+  .methods { columns: 2; column-gap: var(--space-8); }
+  @media (max-width: 560px){ .methods { columns: 1; } }
+  .methods li { break-inside: avoid; }
+
+  /* key-value table (Bartle) */
+  .kvtable { border:1px solid var(--color-line); border-radius: var(--radius-lg); overflow:hidden; }
+  .kvtable .r { display:grid; grid-template-columns: 1fr 1.8fr; gap: var(--space-6); padding: var(--space-4) var(--space-6); border-top:1px solid var(--color-line); align-items:baseline; }
+  .kvtable .r.head { border-top:none; background: color-mix(in srgb, var(--color-peri-100) 55%, var(--color-paper)); }
+  .kvtable .r .ht { font-family: var(--font-mono); font-size: var(--fs-caption); text-transform:uppercase; letter-spacing:0.08em; color: var(--color-ink-muted); }
+  .kvtable .r .pt { font-family: var(--font-display); font-weight: var(--fw-semibold); font-size: var(--fs-body); color: var(--fg); }
+  .kvtable .r .op { color: var(--fg-soft); font-size: var(--fs-small); }
+
+  /* persona carousel */
+  .car-head { display:flex; justify-content:space-between; align-items:center; margin-bottom: var(--space-6); gap: var(--space-4); }
+  .car-controls { display:flex; gap: var(--space-2); flex:none; }
+  .car-btn { width:40px; height:40px; border-radius:50%; border:1px solid var(--color-line); background: var(--color-surface); color: var(--fg); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size: var(--fs-h4); line-height:1; transition: color var(--dur-fast), border-color var(--dur-fast); }
+  .car-btn:hover { color: var(--accent); border-color: var(--accent); }
+  .car-track { display:flex; gap: var(--space-6); overflow-x:auto; scroll-snap-type:x mandatory; scroll-behavior:smooth; padding-bottom: var(--space-3); scrollbar-width: thin; }
+  .car-slide { flex:0 0 clamp(280px, 80%, 460px); scroll-snap-align:start; }
+  .persona-media { aspect-ratio: 4/3; border-radius: var(--radius-lg); border:1px solid var(--color-line); position:relative; overflow:hidden; background: linear-gradient(135deg, var(--color-peri-300), var(--color-green-300)); }
+  .car-slide:nth-child(2) .persona-media { background: linear-gradient(135deg, var(--color-peri-300), var(--color-clay-300)); }
+  .car-slide:nth-child(3) .persona-media { background: linear-gradient(135deg, var(--color-green-500), var(--color-peri-300)); }
+  .car-slide:nth-child(4) .persona-media { background: linear-gradient(135deg, var(--color-clay-500), var(--color-peri-500)); }
+  .car-slide .cap { margin-top: var(--space-3); }
+  .car-slide .cap .t { font-family: var(--font-display); font-weight: var(--fw-semibold); font-size: var(--fs-h4); }
+  .car-slide .cap .s { color: var(--color-ink-muted); font-size: var(--fs-small); }
+
+  /* survey charts */
+  .charts-2 { display:grid; grid-template-columns: 1fr 1fr; gap: var(--space-16); }
+  @media (max-width: 860px){ .charts-2 { grid-template-columns:1fr; gap: var(--space-12); } }
+  .chart h4 { font-size: var(--fs-h4); font-weight: var(--fw-semibold); margin-bottom: var(--space-2); }
+  .chart .csub { font-family: var(--font-mono); font-size: var(--fs-caption); text-transform:uppercase; letter-spacing:0.08em; color: var(--color-ink-muted); margin-bottom: var(--space-8); display:block; }
+  .sbar { margin-bottom: var(--space-4); }
+  .sbar .lab { display:flex; justify-content:space-between; align-items:baseline; gap: var(--space-4); font-size: var(--fs-small); color: var(--fg-soft); margin-bottom: var(--space-2); }
+  .sbar .lab .v { color: var(--accent); font-weight: var(--fw-semibold); font-variant-numeric: tabular-nums; flex:none; }
+  .sbar .track { height:12px; background: var(--color-line); border-radius: var(--radius-pill); overflow:hidden; }
+  .sbar .track i { display:block; height:100%; width:0; border-radius: var(--radius-pill); background: linear-gradient(90deg, var(--color-peri-500), var(--color-green-500)); transition: width var(--dur-reveal) var(--ease-out); transition-delay: var(--d, 0ms); }
+  .charts-2.in .sbar .track i { width: var(--w); }
+
+  /* interview insight card */
+  .interview-card { display:grid; grid-template-columns: 0.85fr 1.5fr; gap: var(--space-16); border:1px solid var(--color-line); border-radius: var(--radius-lg); padding: var(--space-12); background: var(--color-surface); }
+  @media (max-width: 860px){ .interview-card { grid-template-columns:1fr; gap: var(--space-12); padding: var(--space-8); } }
+  @media (min-width: 861px){ .ic-meta { border-right:1px solid var(--color-line); padding-right: var(--space-12); } }
+  .ic-meta .role { color: var(--fg-soft); margin: var(--space-1) 0 0; }
+  .ic-traits { display:flex; flex-wrap:wrap; gap: var(--space-2); margin-top: var(--space-6); }
+  .ic-traits .tag { font-family: var(--font-mono); font-size: var(--fs-caption); text-transform:uppercase; letter-spacing:0.08em; color: var(--fg-soft); border:1px solid var(--color-line); border-radius: var(--radius-pill); padding: var(--space-1) var(--space-3); }
+  .ic-pain { margin: var(--space-8) 0 0; padding-left: 1.2em; color: var(--fg-soft); }
+  .ic-pain li { margin-bottom: var(--space-2); }
+  .ic-insights .insight + .insight { margin-top: var(--space-8); }
+  .ic-insights h4 { font-size: var(--fs-h4); font-weight: var(--fw-semibold); margin-bottom: var(--space-2); }
+  .ic-insights .insight p { color: var(--fg-soft); margin:0; max-width: 62ch; }
+
+  /* three-up text */
+  .three-up { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-12); }
+  @media (max-width: 860px){ .three-up { grid-template-columns: 1fr; gap: var(--space-12); } }
+  .three-up h3 { font-size: var(--fs-h4); font-weight: var(--fw-semibold); margin-bottom: var(--space-4); }
+  .three-up .eyebrow { color: var(--accent-2); }
+
+  /* feature set columns */
+  .feat-cols { display:grid; grid-template-columns: repeat(3,1fr); gap: var(--space-6); }
+  @media (max-width: 860px){ .feat-cols { grid-template-columns:1fr; } }
+  .feat-col { border:1px solid var(--color-line); border-radius: var(--radius-lg); overflow:hidden; }
+  .feat-col .hd { background: color-mix(in srgb, var(--color-green-100) 60%, var(--color-paper)); padding: var(--space-4) var(--space-6); font-family: var(--font-mono); font-size: var(--fs-caption); text-transform:uppercase; letter-spacing:0.08em; color: var(--color-green-900); border-bottom:1px solid var(--color-line); }
+  .feat-col ul { list-style:none; margin:0; padding: var(--space-6); }
+  .feat-col li { color: var(--fg-soft); font-size: var(--fs-small); padding: var(--space-2) 0; border-top:1px solid var(--color-line); }
+  .feat-col li:first-child { border-top:none; padding-top:0; }
+
+  /* outcome banner */
+  .outcome { background: var(--accent); color: var(--on-accent); border-radius: var(--radius-lg); padding: var(--space-16) var(--space-12); text-align:center; }
+  .outcome .section-label { color: color-mix(in srgb, var(--on-accent) 70%, transparent); }
+  .outcome p { margin: 0; font-family: var(--font-display); font-weight: var(--fw-regular); font-size: clamp(1.5rem,1rem+2vw,2.4rem); line-height: var(--lh-snug); letter-spacing:-0.02em; max-width: 26ch; margin-inline:auto; color: var(--on-accent); }
+
+  /* learnings */
+  .learn { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-16); }
+  @media (max-width: 860px){ .learn { grid-template-columns: 1fr; gap: var(--space-12); } }
+  .learn h3 { font-size: var(--fs-h3); font-weight: var(--fw-semibold); margin-bottom: var(--space-4); }
+  .learn p { color: var(--fg-soft); }
+
+  /* media */
+  .media { aspect-ratio: 21/9; border-radius: var(--radius-lg); overflow:hidden; position:relative; border:1px solid var(--color-line); background: linear-gradient(135deg, var(--color-peri-300), var(--color-green-300)); }
+
+  /* cta + footer */
+  .case-cta { border-top: 1px solid var(--color-line); text-align: center; padding-block: var(--space-32); }
+  .case-cta h2 { font-size: clamp(1.8rem, 1.1rem + 2.6vw, 3rem); font-weight: var(--fw-medium); margin-bottom: var(--space-8); max-width: 18ch; margin-inline: auto; }
+  .btn { display: inline-flex; align-items: center; gap: var(--space-2); font-weight: var(--fw-medium); font-size: var(--fs-small); padding: var(--space-3) var(--space-6); border-radius: var(--radius-pill); border: 1px solid transparent; text-decoration: none; transition: transform var(--dur-fast) var(--ease-out), background var(--dur-base); }
+  .btn:hover { transform: translateY(-2px); }
+  .btn-primary { background: var(--accent); color: var(--on-accent); }
+  .btn-primary:hover { background: var(--color-peri-500); }
+  .btn-ghost { background: transparent; color: var(--fg); border-color: var(--color-line); }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+  .arrow { display:inline-block; transition: transform var(--dur-base) var(--ease-out); }
+  .btn:hover .arrow { transform: translateX(4px); }
+  footer.foot { border-top: 1px solid var(--color-line); padding-block: var(--space-12); }
+  footer.foot .wrap { display:flex; justify-content: space-between; flex-wrap: wrap; gap: var(--space-4); font-size: var(--fs-small); color: var(--color-ink-muted); }
+  footer.foot a { text-decoration: none; color: var(--fg-soft); }
+  footer.foot a:hover { color: var(--accent); }
+
+  /* reveal */
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity var(--dur-reveal) var(--ease-out), transform var(--dur-reveal) var(--ease-out); }
+  .reveal.in { opacity: 1; transform: none; }
+</style>
+</head>
+<body id="top">
+
+<nav class="top">
+  <div class="wrap">
+    <div class="brand">
+      <a href="index.html" class="logo">Jade Savoia</a>
+      <a href="index.html#work" class="back">← <span class="lbl">All work</span></a>
+    </div>
+    <div class="links">
+      <a href="index.html#work">Work</a>
+      <a href="index.html#about">About</a>
+      <a href="index.html#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="case-hero wrap">
+  <span class="eyebrow reveal">Case Study · Discovery &amp; Strategy</span>
+  <h1 class="reveal">Creating clarity through exploration</h1>
+  <p class="lead reveal">A four-month discovery and strategy engagement for Activate Games — evaluating whether a native mobile app was the right investment, and uncovering where the real opportunities for growth were.</p>
+  <div class="hero-shot reveal">
+    <span class="ph-label">Hero mockup — replace with project image</span>
+  </div>
+</header>
+
+<!-- META BAR -->
+<section class="meta-bar" style="padding-block:0;">
+  <div class="wrap">
+    <div class="grid">
+      <div class="cell"><span class="k">Client</span><span class="v">Activate Games</span></div>
+      <div class="cell"><span class="k">Role</span><span class="v">Lead UX Designer &amp; Researcher</span></div>
+      <div class="cell"><span class="k">Team</span><span class="v">2 Designers</span></div>
+      <div class="cell"><span class="k">Scope</span><span class="v">Discovery &amp; Strategy Engagement</span></div>
+      <div class="cell"><span class="k">Duration</span><span class="v">4 Months</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- CHALLENGE -->
+<section class="wrap">
+  <div class="prose reveal" style="max-width:60ch;">
+    <span class="section-label">The Challenge</span>
+    <h2 class="sec">Was a mobile app worth the investment?</h2>
+    <p>Activate Games delivers a highly engaging in-person experience, but as the company expanded, leadership needed to determine whether investing in a native mobile app would create enough value to justify the cost and complexity.</p>
+    <p>As Lead UX Designer and Researcher, I led a discovery engagement to evaluate user needs, operational constraints, competitive trends, and technical feasibility — to determine whether a mobile app was the right strategic investment.</p>
+  </div>
+  <div class="cards-3 reveal" style="margin-top: var(--space-16);">
+    <div class="panel">
+      <span class="section-label">Activate wanted to understand how to</span>
+      <ul class="ul">
+        <li>Increase repeat visits</li>
+        <li>Improve weekday attendance</li>
+        <li>Identify operational and digital opportunities that could drive business growth</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <span class="section-label">Business goals</span>
+      <ul class="ul">
+        <li>Increase conversion from first-time visitors to repeat customers</li>
+        <li>Improve underperforming weekday bookings</li>
+        <li>Uncover operational and product opportunities beyond the mobile app question</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <span class="section-label">Key constraints</span>
+      <ul class="ul">
+        <li>A fragmented technology ecosystem with limited integration capabilities</li>
+        <li>Recommendations had to balance user value with operational feasibility</li>
+        <li>The solution needed to scale over the long term</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- DISCOVERY -->
+<div class="phase-head alt reveal"><span class="section-label">Phase 01</span><h2>Discovery</h2></div>
+
+<section class="wrap">
+  <div class="reveal" style="text-align:center; margin-bottom: var(--space-16);">
+    <span class="section-label">Research plan</span>
+    <h2 class="sec" style="margin-inline:auto; max-width: 20ch;">A three-phase engagement</h2>
+  </div>
+  <div class="cards-3">
+    <div class="proc reveal">
+      <span class="step">Phase 1 · Discover</span>
+      <h3>Gather the full picture</h3>
+      <p>On-site observation, surveys, stakeholder interviews, competitive analysis, and a technology audit.</p>
+    </div>
+    <div class="proc reveal">
+      <span class="step">Phase 2 · Synthesize</span>
+      <h3>Make sense of it</h3>
+      <p>Journey maps, personas, affinity mapping, empathy maps, and service blueprints.</p>
+    </div>
+    <div class="proc reveal">
+      <span class="step">Phase 3 · Recommend</span>
+      <h3>Turn insight into strategy</h3>
+      <p>Product strategy, feature prioritization, and technology recommendations.</p>
+    </div>
+  </div>
+
+  <div class="two-col reveal" style="margin-top: var(--space-24); align-items:start;">
+    <div class="prose">
+      <h3 class="sub">Research methods</h3>
+      <p>A mixed-method approach let us evaluate the full customer journey while understanding both operational realities and market expectations.</p>
+    </div>
+    <ul class="ul methods">
+      <li>On-site observation</li>
+      <li>User interviews</li>
+      <li>User surveys</li>
+      <li>Stakeholder interviews</li>
+      <li>Competitive analysis</li>
+      <li>Technology audit</li>
+      <li>Secondary research</li>
+    </ul>
+  </div>
+
+  <div class="two-col reveal" style="margin-top: var(--space-24); align-items:start;">
+    <div class="prose">
+      <h3 class="sub">User interviews</h3>
+      <p>We ran in-depth interviews with first-time and returning guests, alongside frontline staff, to understand the full arc of a visit — from planning and arrival through play and follow-up. Interviews surfaced the emotional highs and the friction points that numbers alone couldn't explain.</p>
+    </div>
+    <div class="prose">
+      <span class="section-label">What we listened for</span>
+      <ul class="ul">
+        <li>What motivated people to visit — and to come back</li>
+        <li>Moments of confusion during games and check-in</li>
+        <li>Barriers that kept guests from visiting on weekdays</li>
+        <li>What made a visit feel worth repeating</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="interview-card reveal" style="margin-top: var(--space-16);">
+    <div class="ic-meta">
+      <span class="section-label">Interview insights</span>
+      <h3 class="sub" style="margin-bottom: var(--space-2);">Summary</h3>
+      <span class="section-label" style="color:var(--accent); margin:0;">Pain points</span>
+    </div>
+    <div class="ic-insights">
+      <div class="insight">
+        <h4>Wait times</h4>
+        <ul class="ul">
+          <li>All guests expressed frustration with wait times at their respective locations.</li>
+          <li>Technical issues take games offline, making waits even longer.</li>
+        </ul>
+      </div>
+      <div class="insight">
+        <h4>Sound</h4>
+        <ul class="ul">
+          <li>3 of 4 guests were frustrated with sound levels — it often made instructions hard to hear, making gameplay more difficult.</li>
+        </ul>
+      </div>
+      <div class="insight">
+        <h4>Badges &amp; challenges</h4>
+        <ul class="ul">
+          <li>All guests found it difficult to work toward badges, with little visibility into what each one takes to earn.</li>
+        </ul>
+      </div>
+      <div class="insight">
+        <h4>Game-play requirements</h4>
+        <ul class="ul">
+          <li>Requirements either stopped guests from playing (too few people) or hurt the experience (too many for one room, physical demands).</li>
+        </ul>
+      </div>
+      <div class="insight">
+        <h4>Cost</h4>
+        <ul class="ul">
+          <li>Guests felt the value is still good, but wished for membership options or discount days so they could visit more often.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="interview-card reveal" style="margin-top: var(--space-12);">
+    <div class="ic-meta">
+      <span class="section-label">Interview insights</span>
+      <h3 class="sub" style="margin-bottom: var(--space-2);">Summary</h3>
+      <span class="section-label" style="color:var(--accent-2); margin:0;">Opportunities</span>
+    </div>
+    <div class="ic-insights">
+      <div class="insight">
+        <h4>Special events &amp; badges</h4>
+        <ul class="ul">
+          <li>All guests were interested in special events — from exercise classes in the mega grid to themed days (holidays, retro nights, local game-store collabs) and location-based events.</li>
+        </ul>
+      </div>
+      <div class="insight">
+        <h4>Small-scale competition</h4>
+        <ul class="ul">
+          <li>3 of 4 guests were excited by smaller-scale competitions — even "teams" of friends and family who compete by tracking and comparing scores.</li>
+        </ul>
+      </div>
+      <div class="insight">
+        <h4>Queues</h4>
+        <ul class="ul">
+          <li>All guests liked digitally queuing rooms or preplanning their visit. Knowing the wait up front made it easier and set reasonable expectations.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="two-col lean reveal" style="margin-top: var(--space-24); align-items:start;">
+    <div class="prose">
+      <h3 class="sub">User surveys</h3>
+      <p>A broader survey validated the interview themes at scale and quantified how often each friction point actually occurred. It let us separate loud-but-rare complaints from the issues affecting most guests — turning anecdotes into priorities we could act on with confidence.</p>
+    </div>
+    <div class="prose">
+      <span class="section-label">What the survey measured</span>
+      <ul class="ul">
+        <li>Which features guests most wanted from an app</li>
+        <li>What would motivate more frequent visits</li>
+        <li>How wait times affected overall satisfaction</li>
+        <li>Comfort with digital tools like check-in and reservations</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="charts-2 reveal" style="margin-top: var(--space-24);">
+    <div class="chart">
+      <h4>Top value-adds people want in an app</h4>
+      <span class="csub">% of respondents · n = 124</span>
+      <div class="sbar" style="--d:0ms"><div class="lab"><span>Discounts / promotions</span><span class="v countup" data-to="68.5" data-suffix="%">0%</span></div><div class="track" style="--w:68.5%"><i></i></div></div>
+      <div class="sbar" style="--d:90ms"><div class="lab"><span>Extend time without leaving the game area</span><span class="v countup" data-to="51.6" data-suffix="%">0%</span></div><div class="track" style="--w:51.6%"><i></i></div></div>
+      <div class="sbar" style="--d:180ms"><div class="lab"><span>Track stats — rewards, leaderboards</span><span class="v countup" data-to="46.7" data-suffix="%">0%</span></div><div class="track" style="--w:46.7%"><i></i></div></div>
+      <div class="sbar" style="--d:270ms"><div class="lab"><span>Instant check-in / waiver signing</span><span class="v countup" data-to="45.2" data-suffix="%">0%</span></div><div class="track" style="--w:45.2%"><i></i></div></div>
+      <div class="sbar" style="--d:360ms"><div class="lab"><span>Time reminders / warnings</span><span class="v countup" data-to="38.7" data-suffix="%">0%</span></div><div class="track" style="--w:38.7%"><i></i></div></div>
+      <div class="sbar" style="--d:450ms"><div class="lab"><span>Game mode instructions / tutorials</span><span class="v countup" data-to="38.7" data-suffix="%">0%</span></div><div class="track" style="--w:38.7%"><i></i></div></div>
+    </div>
+
+    <div class="chart">
+      <h4>What would make people return more often</h4>
+      <span class="csub">% of respondents · n = 158</span>
+      <div class="sbar" style="--d:0ms"><div class="lab"><span>Discounts / promotions</span><span class="v countup" data-to="89.8" data-suffix="%">0%</span></div><div class="track" style="--w:89.8%"><i></i></div></div>
+      <div class="sbar" style="--d:90ms"><div class="lab"><span>More / different game modes</span><span class="v countup" data-to="46.2" data-suffix="%">0%</span></div><div class="track" style="--w:46.2%"><i></i></div></div>
+      <div class="sbar" style="--d:180ms"><div class="lab"><span>Knowing wait time is shorter</span><span class="v countup" data-to="45.6" data-suffix="%">0%</span></div><div class="track" style="--w:45.6%"><i></i></div></div>
+      <div class="sbar" style="--d:270ms"><div class="lab"><span>Special events</span><span class="v countup" data-to="34.2" data-suffix="%">0%</span></div><div class="track" style="--w:34.2%"><i></i></div></div>
+      <div class="sbar" style="--d:360ms"><div class="lab"><span>"Adult Swim" (18+)</span><span class="v countup" data-to="31.6" data-suffix="%">0%</span></div><div class="track" style="--w:31.6%"><i></i></div></div>
+      <div class="sbar" style="--d:450ms"><div class="lab"><span>Designated quiet play hours</span><span class="v countup" data-to="31.6" data-suffix="%">0%</span></div><div class="track" style="--w:31.6%"><i></i></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="pull-quote narrow reveal">
+    <blockquote>Users wanted to return — they simply needed more information, control, and reasons to stay engaged between visits.</blockquote>
+    <cite>— Consistent theme across every research method</cite>
+  </div>
+</section>
+
+<!-- COMPETITIVE ANALYSIS -->
+<section class="wrap">
+  <div class="two-col lean reveal" style="align-items:start;">
+    <div class="prose">
+      <span class="section-label">Market expectations</span>
+      <h2 class="sec">Competitors were already going digital</h2>
+      <p>Activate's closest competitors were already extending their experiences through mobile apps — suggesting an app wouldn't just meet user expectations, but create a foundation for long-term engagement.</p>
+    </div>
+    <div class="panel">
+      <span class="section-label">Common features included</span>
+      <ul class="ul">
+        <li>Reservations</li>
+        <li>Rewards programs</li>
+        <li>Progress tracking</li>
+        <li>Push notifications</li>
+        <li>Event management</li>
+        <li>Social competition</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="reveal" style="margin-top: var(--space-24);">
+    <h2 class="sec" style="margin-bottom: var(--space-8); max-width: 22ch;">Research revealed three primary friction areas</h2>
+    <div class="cards-3">
+      <div class="proc finding">
+        <span class="n">01</span>
+        <h3>Game familiarity &amp; awareness</h3>
+        <p>Many guests struggled to understand the available games, rules, and features. Without effective onboarding, instructions, or accessibility support, confusion often became frustration.</p>
+      </div>
+      <div class="proc finding">
+        <span class="n">02</span>
+        <h3>Planning &amp; time management</h3>
+        <p>Wait times were the strongest predictor of customer satisfaction. Guests wanted:</p>
+        <ul class="ul">
+          <li>Better visibility into wait times</li>
+          <li>Faster check-in experiences</li>
+          <li>More control over how they spent their time</li>
+        </ul>
+      </div>
+      <div class="proc finding">
+        <span class="n">03</span>
+        <h3>Social experiences &amp; community</h3>
+        <p>Repeat visits were driven less by discounts and more by novelty, competition, and shared experiences. Users wanted to:</p>
+        <ul class="ul">
+          <li>Compete with friends</li>
+          <li>Track progress</li>
+          <li>Participate in events</li>
+          <li>Engage with the community between visits</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="reveal" style="margin-top: var(--space-24);">
+    <h3 class="sub" style="margin-bottom: var(--space-4);">Mapping opportunity to Bartle's player types</h3>
+    <p style="color:var(--fg-soft); max-width:64ch; margin-bottom: var(--space-8);">Bartle's player types gave us a lens for understanding what motivates different guests — and which features each group would actually care about. By mapping opportunities to achievers, socializers, competitors, and explorers, we could see where a feature would land and for whom. These motivations carried directly into our personas, grounding each one in a distinct set of needs rather than demographics alone.</p>
+    <div class="kvtable">
+      <div class="r head"><span class="ht">Player type</span><span class="ht">Opportunity</span></div>
+      <div class="r"><span class="pt">Achievers</span><span class="op">Progress tracking, badges, leaderboards</span></div>
+      <div class="r"><span class="pt">Socializers</span><span class="op">Group scheduling, event coordination</span></div>
+      <div class="r"><span class="pt">Competitors</span><span class="op">Stat comparison and rankings</span></div>
+      <div class="r"><span class="pt">Explorers</span><span class="op">Challenges, unlockables, hidden achievements</span></div>
+    </div>
+  </div>
+
+  <div class="reveal" style="margin-top: var(--space-24);">
+    <div class="car-head">
+      <span class="section-label" style="margin:0;">Personas</span>
+      <div class="car-controls">
+        <button class="car-btn" data-dir="-1" aria-label="Previous persona">←</button>
+        <button class="car-btn" data-dir="1" aria-label="Next persona">→</button>
+      </div>
+    </div>
+    <div class="car-track">
+      <div class="car-slide">
+        <div class="persona-media"><span class="ph-label">Persona 01</span></div>
+        <div class="cap"><div class="t">The Achiever</div><div class="s">Driven by progress, badges &amp; leaderboards</div></div>
+      </div>
+      <div class="car-slide">
+        <div class="persona-media"><span class="ph-label">Persona 02</span></div>
+        <div class="cap"><div class="t">The Socializer</div><div class="s">Comes for shared experiences &amp; events</div></div>
+      </div>
+      <div class="car-slide">
+        <div class="persona-media"><span class="ph-label">Persona 03</span></div>
+        <div class="cap"><div class="t">The Competitor</div><div class="s">Motivated by rankings &amp; head-to-head play</div></div>
+      </div>
+      <div class="car-slide">
+        <div class="persona-media"><span class="ph-label">Persona 04</span></div>
+        <div class="cap"><div class="t">The Explorer</div><div class="s">Seeks novelty, challenges &amp; hidden finds</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STRATEGIC RECOMMENDATION -->
+<div class="phase-head alt reveal"><span class="section-label">Phase 02</span><h2>Strategic Recommendation</h2></div>
+
+<section class="wrap">
+  <div class="reveal" style="text-align:center; margin-bottom: var(--space-16);">
+    <span class="section-label">Three opportunity areas</span>
+    <h2 class="sec" style="margin-inline:auto; max-width: 24ch;">Findings translated into three strategic initiatives</h2>
+  </div>
+  <div class="feat-cols reveal">
+    <div class="feat-col">
+      <div class="hd">Awareness</div>
+      <ul>
+        <li>Game tutorials</li>
+        <li>Accessibility tools</li>
+        <li>Sound &amp; instruction support</li>
+        <li>Game information</li>
+        <li>Onboarding</li>
+      </ul>
+    </div>
+    <div class="feat-col">
+      <div class="hd">Planning</div>
+      <ul>
+        <li>Wait-time visibility &amp; estimates</li>
+        <li>Digital queues</li>
+        <li>Reservations &amp; digital waivers</li>
+        <li>Accelerated check-in</li>
+        <li>Session management</li>
+        <li>Push notifications</li>
+        <li>Personal statistics</li>
+      </ul>
+    </div>
+    <div class="feat-col">
+      <div class="hd">Community</div>
+      <ul>
+        <li>Competitions</li>
+        <li>Leaderboards</li>
+        <li>Badge &amp; achievement systems</li>
+        <li>Event calendar</li>
+        <li>Social sharing</li>
+        <li>Community engagement</li>
+      </ul>
+    </div>
+  </div>
+  <p class="reveal" style="color:var(--fg-soft); max-width:56ch; margin-top: var(--space-8);">Each recommendation mapped directly back to both user needs and business goals.</p>
+</section>
+
+<!-- STAKEHOLDER COLLABORATION -->
+<section class="wrap">
+  <div class="reveal">
+    <span class="section-label">Stakeholder collaboration</span>
+    <h2 class="sec">Sharing findings early and often</h2>
+    <p style="color:var(--fg-soft); max-width:60ch;">Findings were shared after each research phase, allowing stakeholders to validate insights, influence priorities, and stay aligned throughout the process.</p>
+    <p style="color:var(--fg-soft); max-width:60ch;">Continuous communication let us adapt the research approach as new findings emerged — while preserving confidence in the final recommendation.</p>
+  </div>
+</section>
+
+<!-- IMPACT -->
+<div class="phase-head reveal"><span class="section-label">Outcome</span><h2>Impact</h2></div>
+
+<section class="wrap" style="padding-top:0;">
+  <div class="outcome narrow reveal">
+    <span class="section-label">The engagement answered the central question</span>
+    <p>Yes — building a mobile app was a strategically valuable investment.</p>
+  </div>
+  <div class="two-col lean reveal" style="margin-top: var(--space-24); align-items:start;">
+    <div class="prose">
+      <h3 class="sub">Beyond the recommendation</h3>
+      <p>The project gave leadership both a product strategy and a broader business strategy for future growth.</p>
+    </div>
+    <ul class="ul">
+      <li>A research-backed feature roadmap</li>
+      <li>A clearer understanding of user expectations</li>
+      <li>Visibility into operational inefficiencies</li>
+      <li>Competitive market insights</li>
+      <li>New opportunities for events, programming, and in-person experiences</li>
+    </ul>
+  </div>
+</section>
+
+<!-- WHAT I LEARNED -->
+<div class="phase-head reveal"><h2>What I learned from this project</h2></div>
+
+<section class="wrap" style="padding-top:0;">
+  <div class="learn narrow">
+    <div class="reveal">
+      <h3>Adaptability strengthens research</h3>
+      <p>Strong discovery work requires a structured plan — but great discovery work adapts when new insights emerge. Being willing to pivot methods while maintaining rigor produced a stronger outcome than following a fixed process.</p>
+    </div>
+    <div class="reveal">
+      <h3>Operational systems shape product strategy</h3>
+      <p>Technology limitations and operational workflows don't just influence design decisions — they often define them. Connecting technical constraints, business realities, and user needs helped me become a stronger strategic partner.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="case-cta">
+  <div class="wrap">
+    <h2 class="reveal">Like what you see? Let's make something together.</h2>
+    <div class="reveal" style="display:flex; gap:var(--space-4); justify-content:center; flex-wrap:wrap;">
+      <a class="btn btn-primary" href="index.html#contact">Get in touch <span class="arrow">→</span></a>
+      <a class="btn btn-ghost" href="index.html#work">View more work</a>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="wrap">
+    <span>© 2026 Jade Savoia. All rights reserved.</span>
+    <a href="index.html">Back to home →</a>
+  </div>
+</footer>
+
+<script>
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function countUp(el){
+    const raw = el.dataset.to; const to = parseFloat(raw); const suf = el.dataset.suffix || '';
+    const dec = (raw.split('.')[1] || '').length;
+    if (reduce){ el.textContent = to.toFixed(dec) + suf; return; }
+    const dur = 1100, start = performance.now();
+    function tick(now){
+      const p = Math.min((now - start) / dur, 1);
+      const eased = 0.5 - Math.cos(Math.PI * p) / 2;
+      el.textContent = (to * eased).toFixed(dec) + suf;
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        e.target.querySelectorAll('.countup').forEach(c => { if(!c.dataset.done){ c.dataset.done='1'; countUp(c); } });
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  const nav = document.querySelector('nav.top');
+  const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 8);
+  onScroll(); window.addEventListener('scroll', onScroll, { passive: true });
+
+  // Persona carousel
+  document.querySelectorAll('.car-controls').forEach(ctrl => {
+    const track = ctrl.closest('.reveal').querySelector('.car-track');
+    const step = () => {
+      const slide = track.querySelector('.car-slide');
+      const gap = parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap) || 0;
+      return slide ? slide.getBoundingClientRect().width + gap : track.clientWidth;
+    };
+    ctrl.querySelectorAll('.car-btn').forEach(btn => {
+      btn.addEventListener('click', () => track.scrollBy({ left: step() * parseInt(btn.dataset.dir, 10), behavior: 'smooth' }));
+    });
+  });
+</script>
+</body>
+</html>

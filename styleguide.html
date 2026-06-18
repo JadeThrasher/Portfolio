@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jade — Portfolio Design System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-body);
+    font-size: var(--fs-body);
+    line-height: var(--lh-normal);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---- helpers ---- */
+  .wrap { max-width: var(--container); margin: 0 auto; padding-inline: var(--gutter); }
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: var(--fs-caption);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 var(--space-4);
+  }
+  h1,h2,h3,h4 { font-family: var(--font-display); font-weight: var(--fw-black); line-height: var(--lh-tight); letter-spacing: var(--tracking-tight); margin: 0; }
+  .display { font-size: var(--fs-display); }
+  .h1 { font-size: var(--fs-h1); }
+  .h2 { font-size: var(--fs-h2); }
+  .h3 { font-size: var(--fs-h3); font-weight: var(--fw-semibold); }
+  .h4 { font-size: var(--fs-h4); font-weight: var(--fw-semibold); }
+  .lead { font-size: var(--fs-lead); color: var(--fg-soft); line-height: var(--lh-snug); max-width: 30ch; }
+  p { max-width: var(--container-text); }
+
+  section { padding-block: var(--space-32); border-top: 1px solid var(--color-line); }
+  section:first-of-type { border-top: none; }
+  .section-label { font-family: var(--font-mono); font-size: var(--fs-caption); letter-spacing: var(--tracking-wide); text-transform: uppercase; color: var(--color-ink-muted); margin-bottom: var(--space-12); display:block; }
+
+  /* ---- top nav ---- */
+  nav.top {
+    position: sticky; top: 0; z-index: var(--z-nav);
+    background: color-mix(in srgb, var(--bg) 86%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--color-line);
+  }
+  nav.top .wrap { display: flex; align-items: center; justify-content: space-between; padding-block: var(--space-4); }
+  nav.top .logo { font-family: var(--font-display); font-weight: var(--fw-black); font-size: 1.4rem; letter-spacing: -0.03em; }
+  nav.top a { color: var(--fg-soft); text-decoration: none; margin-left: var(--space-6); font-size: var(--fs-small); transition: color var(--dur-fast) var(--ease-soft); }
+  nav.top a:hover { color: var(--accent); }
+
+  /* ---- hero ---- */
+  .hero { padding-block: var(--space-32) var(--space-24); }
+  .hero .display { max-width: 18ch; }
+  .hero .lead { margin-top: var(--space-8); }
+
+  /* ---- swatches ---- */
+  .swatch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--space-4); }
+  .swatch { border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--color-line); background: var(--color-surface); }
+  .swatch .chip { height: 96px; }
+  .swatch .meta { padding: var(--space-3) var(--space-4); }
+  .swatch .name { font-weight: var(--fw-medium); font-size: var(--fs-small); }
+  .swatch .hex { font-family: var(--font-mono); font-size: var(--fs-caption); color: var(--color-ink-muted); }
+
+  /* ---- type specimen ---- */
+  .specimen { display: grid; gap: var(--space-8); }
+  .specimen .row { display: grid; grid-template-columns: 140px 1fr; gap: var(--space-6); align-items: baseline; padding-bottom: var(--space-6); border-bottom: 1px dashed var(--color-line); }
+  .specimen .tag { font-family: var(--font-mono); font-size: var(--fs-caption); color: var(--color-ink-muted); }
+  @media (max-width: 640px){ .specimen .row { grid-template-columns: 1fr; gap: var(--space-2);} }
+
+  /* ---- buttons ---- */
+  .btn-row { display: flex; flex-wrap: wrap; gap: var(--space-4); align-items: center; }
+  .btn {
+    display: inline-flex; align-items: center; gap: var(--space-2);
+    font-family: var(--font-body); font-weight: var(--fw-medium); font-size: var(--fs-small);
+    padding: var(--space-3) var(--space-6); border-radius: var(--radius-pill);
+    border: 1px solid transparent; cursor: pointer; text-decoration: none;
+    transition: transform var(--dur-fast) var(--ease-out), background var(--dur-base) var(--ease-soft), color var(--dur-base) var(--ease-soft);
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn-primary { background: var(--accent); color: var(--on-accent); }
+  .btn-primary:hover { background: var(--color-green-900); }
+  .btn-secondary { background: var(--color-green-700); color: #fff; }
+  .btn-secondary:hover { background: var(--color-green-900); }
+  .btn-ghost { background: transparent; color: var(--fg); border-color: var(--color-line); }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+  .arrow { transition: transform var(--dur-base) var(--ease-out); }
+  .btn:hover .arrow { transform: translateX(4px); }
+
+  /* ---- work cards ---- */
+  .cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-12); }
+  @media (max-width: 760px){ .cards { grid-template-columns: 1fr; } }
+  .card { display: block; text-decoration: none; color: inherit; }
+  .card .thumb {
+    aspect-ratio: 4/3; border-radius: var(--radius-lg); overflow: hidden;
+    background: linear-gradient(135deg, var(--color-peri-500), var(--color-green-300));
+    position: relative; transition: transform var(--dur-slow) var(--ease-out);
+  }
+  .card:nth-child(2) .thumb { background: linear-gradient(135deg, var(--color-peri-300), var(--color-clay-300)); }
+  .card .thumb::after { content:""; position:absolute; inset:0; background: rgba(34,31,26,0); transition: background var(--dur-base);}
+  .card:hover .thumb { transform: scale(1.015); }
+  .card .thumb-label { position:absolute; left: var(--space-6); bottom: var(--space-6); color:#fff; font-family: var(--font-display); font-weight: var(--fw-semibold); font-size: var(--fs-h4); }
+  .card .meta { margin-top: var(--space-4); display:flex; justify-content: space-between; align-items: baseline; gap: var(--space-4); }
+  .card .title { font-family: var(--font-display); font-weight: var(--fw-semibold); font-size: var(--fs-h3); }
+  .card .role { color: var(--color-ink-muted); font-size: var(--fs-small); }
+
+  /* ---- chaptered case-study demo ---- */
+  .case { display: grid; grid-template-columns: 200px 1fr; gap: var(--space-16); }
+  @media (max-width: 760px){ .case { grid-template-columns: 1fr; gap: var(--space-8);} }
+  .chapters { position: sticky; top: 88px; align-self: start; display: flex; flex-direction: column; gap: var(--space-3); }
+  .chapters a { text-decoration: none; color: var(--color-ink-muted); font-size: var(--fs-small); padding: var(--space-1) 0; border-left: 2px solid var(--color-line); padding-left: var(--space-4); transition: all var(--dur-fast); }
+  .chapters a.active, .chapters a:hover { color: var(--accent); border-color: var(--accent); }
+  .case-block { margin-bottom: var(--space-16); }
+  .stat { font-family: var(--font-display); font-weight: var(--fw-black); font-size: var(--fs-h1); color: var(--accent); line-height: 1; }
+
+  /* ---- spacing/radius scale viz ---- */
+  .scale-row { display:flex; align-items:center; gap: var(--space-4); margin-bottom: var(--space-3); font-family: var(--font-mono); font-size: var(--fs-caption); color: var(--color-ink-muted);}
+  .scale-bar { height: 16px; background: var(--color-green-300); border-radius: 3px; }
+  .radii-row { display:flex; gap: var(--space-6); flex-wrap: wrap; }
+  .radii-box { width: 96px; height: 96px; background: var(--color-peri-100); border: 1px solid var(--color-peri-300); display:flex; align-items:center; justify-content:center; font-family: var(--font-mono); font-size: var(--fs-caption); color: var(--color-peri-700); }
+
+  /* ---- motion demo ---- */
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity var(--dur-reveal) var(--ease-out), transform var(--dur-reveal) var(--ease-out); }
+  .reveal.in { opacity: 1; transform: none; }
+
+  footer { padding-block: var(--space-24); border-top: 1px solid var(--color-line); color: var(--color-ink-muted); font-size: var(--fs-small); }
+</style>
+</head>
+<body>
+
+<nav class="top">
+  <div class="wrap">
+    <span class="logo">Jade.</span>
+    <div>
+      <a href="#color">Color</a>
+      <a href="#type">Type</a>
+      <a href="#components">Components</a>
+      <a href="#case">Case study</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero wrap">
+  <p class="eyebrow">Portfolio Design System · v2</p>
+  <h1 class="display">Design that feels personal, made impossible to ignore.</h1>
+  <p class="lead">Contemporary direction — a periwinkle-led palette with earthy-green support, bold modern grotesk headlines, and a generous, motion-led layout.</p>
+  <div class="btn-row" style="margin-top: var(--space-12)">
+    <a class="btn btn-primary" href="#case">View the work <span class="arrow">→</span></a>
+    <a class="btn btn-ghost" href="#type">About me</a>
+  </div>
+</header>
+
+<!-- COLOR -->
+<section id="color" class="wrap">
+  <span class="section-label">01 — Color</span>
+  <h2 class="h2" style="margin-bottom: var(--space-12); max-width: 16ch;">A warm canvas, two confident accents.</h2>
+
+  <h3 class="h4" style="margin-bottom: var(--space-4)">Neutrals</h3>
+  <div class="swatch-grid" style="margin-bottom: var(--space-12)">
+    <div class="swatch"><div class="chip" style="background:#FDFCF8"></div><div class="meta"><div class="name">Paper</div><div class="hex">#FDFCF8</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#F8F4EC"></div><div class="meta"><div class="name">Surface warm</div><div class="hex">#F8F4EC</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#ECE6D9"></div><div class="meta"><div class="name">Line</div><div class="hex">#ECE6D9</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#918A78"></div><div class="meta"><div class="name">Ink muted</div><div class="hex">#918A78</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#57513F"></div><div class="meta"><div class="name">Ink soft</div><div class="hex">#57513F</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#262219"></div><div class="meta"><div class="name">Ink</div><div class="hex">#262219</div></div></div>
+  </div>
+
+  <h3 class="h4" style="margin-bottom: var(--space-4)">Earthy green — primary accent</h3>
+  <div class="swatch-grid" style="margin-bottom: var(--space-12)">
+    <div class="swatch"><div class="chip" style="background:#E7EFD6"></div><div class="meta"><div class="name">Green 100</div><div class="hex">#E7EFD6</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#AAC586"></div><div class="meta"><div class="name">Green 300</div><div class="hex">#AAC586</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#7CA15A"></div><div class="meta"><div class="name">Green 500</div><div class="hex">#7CA15A</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#51683C"></div><div class="meta"><div class="name">Green 700</div><div class="hex">#51683C</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#354227"></div><div class="meta"><div class="name">Green 900</div><div class="hex">#354227</div></div></div>
+  </div>
+
+  <h3 class="h4" style="margin-bottom: var(--space-4)">Periwinkle — secondary accent</h3>
+  <div class="swatch-grid" style="margin-bottom: var(--space-12)">
+    <div class="swatch"><div class="chip" style="background:#ECEDFD"></div><div class="meta"><div class="name">Peri 100</div><div class="hex">#ECEDFD</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#BCBFF7"></div><div class="meta"><div class="name">Peri 300</div><div class="hex">#BCBFF7</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#8D92F0"></div><div class="meta"><div class="name">Peri 500</div><div class="hex">#8D92F0</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#6065C8"></div><div class="meta"><div class="name">Peri 700</div><div class="hex">#6065C8</div></div></div>
+  </div>
+
+  <h3 class="h4" style="margin-bottom: var(--space-4)">Clay — warm support</h3>
+  <div class="swatch-grid">
+    <div class="swatch"><div class="chip" style="background:#F3C6AA"></div><div class="meta"><div class="name">Clay 300</div><div class="hex">#F3C6AA</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#E08A5F"></div><div class="meta"><div class="name">Clay 500</div><div class="hex">#E08A5F</div></div></div>
+  </div>
+</section>
+
+<!-- TYPE -->
+<section id="type" class="wrap">
+  <span class="section-label">02 — Typography</span>
+  <h2 class="h2" style="margin-bottom: var(--space-8); max-width: 18ch;">Space Grotesk for impact, Inter for clarity.</h2>
+  <p style="color: var(--fg-soft); margin-bottom: var(--space-16);">Display headlines use Space Grotesk — a contemporary grotesk with subtle quirks that reads confident and current. Set tight and bold for impact. Body and UI use Inter for clean legibility. Eyebrows and meta use IBM Plex Mono.</p>
+
+  <div class="specimen">
+    <div class="row"><span class="tag">Display / Grotesk 700</span><span class="display">Make it yours.</span></div>
+    <div class="row"><span class="tag">H1 / Grotesk 700</span><span class="h1">Selected work, 2026</span></div>
+    <div class="row"><span class="tag">H2 / Grotesk 700</span><span class="h2">Building brands people believe in</span></div>
+    <div class="row"><span class="tag">H3 / Grotesk 600</span><span class="h3">A snowboard brand for a new era</span></div>
+    <div class="row"><span class="tag">Lead / Inter 400</span><span class="lead">I design digital products and brand systems that unlock hidden potential.</span></div>
+    <div class="row"><span class="tag">Body / Inter 400</span><span style="max-width:50ch">The quick brown fox jumps over the lazy dog. Body copy stays at a comfortable 17px with a 1.6 line-height for long-form readability across case studies and about pages.</span></div>
+    <div class="row"><span class="tag">Eyebrow / Plex Mono</span><span class="eyebrow" style="margin:0">Case study · Branding</span></div>
+  </div>
+</section>
+
+<!-- COMPONENTS -->
+<section id="components" class="wrap">
+  <span class="section-label">03 — Components</span>
+  <h2 class="h2" style="margin-bottom: var(--space-12)">Components</h2>
+
+  <h3 class="h4" style="margin-bottom: var(--space-6)">Buttons</h3>
+  <div class="btn-row" style="margin-bottom: var(--space-16)">
+    <a class="btn btn-primary" href="#">View project <span class="arrow">→</span></a>
+    <a class="btn btn-secondary" href="#">Get in touch</a>
+    <a class="btn btn-ghost" href="#">Read more</a>
+  </div>
+
+  <h3 class="h4" style="margin-bottom: var(--space-6)">Work cards</h3>
+  <div class="cards" style="margin-bottom: var(--space-16)">
+    <a class="card" href="#">
+      <div class="thumb"><span class="thumb-label">Rivian App</span></div>
+      <div class="meta"><span class="title">Electric adventures</span><span class="role">Product design</span></div>
+    </a>
+    <a class="card" href="#">
+      <div class="thumb"><span class="thumb-label">Second Nature</span></div>
+      <div class="meta"><span class="title">Life after loss</span><span class="role">Brand &amp; web</span></div>
+    </a>
+  </div>
+
+  <h3 class="h4" style="margin-bottom: var(--space-6)">Spacing scale (4px base)</h3>
+  <div style="margin-bottom: var(--space-16)">
+    <div class="scale-row"><span style="width:60px">4</span><div class="scale-bar" style="width:4px"></div></div>
+    <div class="scale-row"><span style="width:60px">8</span><div class="scale-bar" style="width:8px"></div></div>
+    <div class="scale-row"><span style="width:60px">16</span><div class="scale-bar" style="width:16px"></div></div>
+    <div class="scale-row"><span style="width:60px">24</span><div class="scale-bar" style="width:24px"></div></div>
+    <div class="scale-row"><span style="width:60px">32</span><div class="scale-bar" style="width:32px"></div></div>
+    <div class="scale-row"><span style="width:60px">48</span><div class="scale-bar" style="width:48px"></div></div>
+    <div class="scale-row"><span style="width:60px">64</span><div class="scale-bar" style="width:64px"></div></div>
+    <div class="scale-row"><span style="width:60px">96</span><div class="scale-bar" style="width:96px"></div></div>
+    <div class="scale-row"><span style="width:60px">128</span><div class="scale-bar" style="width:128px"></div></div>
+  </div>
+
+  <h3 class="h4" style="margin-bottom: var(--space-6)">Corner radii</h3>
+  <div class="radii-row">
+    <div class="radii-box" style="border-radius: var(--radius-sm)">6</div>
+    <div class="radii-box" style="border-radius: var(--radius-md)">14</div>
+    <div class="radii-box" style="border-radius: var(--radius-lg)">28</div>
+    <div class="radii-box" style="border-radius: var(--radius-pill)">pill</div>
+  </div>
+</section>
+
+<!-- CASE STUDY DEMO -->
+<section id="case" class="wrap">
+  <span class="section-label">04 — Case study layout</span>
+  <h2 class="h2" style="margin-bottom: var(--space-16); max-width: 16ch;">Projects told as chaptered stories.</h2>
+  <div class="case">
+    <div class="chapters">
+      <a href="#" class="active">Overview</a>
+      <a href="#">Define</a>
+      <a href="#">Create</a>
+      <a href="#">Commit</a>
+      <a href="#">Outcome</a>
+    </div>
+    <div>
+      <div class="case-block reveal">
+        <p class="eyebrow">Overview</p>
+        <h3 class="h3" style="margin-bottom: var(--space-4)">The partnership</h3>
+        <p style="color: var(--fg-soft)">A sticky chapter rail keeps long case studies navigable. Each section pairs a short narrative with large full-bleed imagery and the occasional oversized stat — borrowed from the Ragged Edge model, kept warm and editorial.</p>
+      </div>
+      <div class="case-block reveal">
+        <div style="aspect-ratio:16/9; border-radius: var(--radius-lg); background: linear-gradient(135deg, var(--color-peri-500), var(--color-green-300));"></div>
+      </div>
+      <div class="case-block reveal">
+        <span class="stat">729%</span>
+        <p style="color: var(--fg-soft); margin-top: var(--space-2)">Example outcome metric, set in display type to punctuate the story.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MOTION -->
+<section id="motion" class="wrap">
+  <span class="section-label">05 — Motion</span>
+  <h2 class="h2" style="margin-bottom: var(--space-8); max-width: 18ch;">Motion with intent.</h2>
+  <p style="color: var(--fg-soft); margin-bottom: var(--space-12)">Reveals on scroll, hover lifts on interactive elements, and smooth eased transitions. Everything respects <code style="font-family:var(--font-mono)">prefers-reduced-motion</code>. Scroll this section — the blocks below fade and rise in.</p>
+  <div style="display:grid; grid-template-columns: repeat(3,1fr); gap: var(--space-6)">
+    <div class="reveal" style="background: var(--color-green-100); border-radius: var(--radius-md); padding: var(--space-8); font-family: var(--font-mono); font-size: var(--fs-small)">--dur-reveal · 900ms<br>--ease-out</div>
+    <div class="reveal" style="background: var(--color-peri-100); border-radius: var(--radius-md); padding: var(--space-8); font-family: var(--font-mono); font-size: var(--fs-small)">hover lift<br>translateY(-2px)</div>
+    <div class="reveal" style="background: var(--color-surface-warm); border: 1px solid var(--color-line); border-radius: var(--radius-md); padding: var(--space-8); font-family: var(--font-mono); font-size: var(--fs-small)">arrow nudge<br>translateX(4px)</div>
+  </div>
+</section>
+
+<footer class="wrap">
+  Jade — Portfolio Design System · Contemporary · Periwinkle + earthy green · Built June 2026.
+  Tokens live in <code style="font-family:var(--font-mono)">tokens.css</code>.
+</footer>
+
+<script>
+  // Scroll reveals
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>

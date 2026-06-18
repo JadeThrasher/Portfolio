@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Etsy iOS — Case Study · Jade Savoia</title>
+<meta name="description" content="Designing trust through information architecture — an Etsy iOS case study by Jade Savoia.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--bg); color: var(--fg);
+    font-family: var(--font-body); font-size: var(--fs-body); line-height: var(--lh-normal);
+    -webkit-font-smoothing: antialiased; overflow-x: hidden;
+  }
+  a { color: inherit; }
+  img { max-width: 100%; display: block; }
+
+  .wrap { max-width: var(--container); margin: 0 auto; padding-inline: var(--gutter); }
+  .narrow { max-width: 860px; margin-inline: auto; }
+  h1,h2,h3,h4 { font-family: var(--font-display); font-weight: var(--fw-medium); line-height: var(--lh-tight); letter-spacing: var(--tracking-tight); margin: 0; }
+  .section-label, .eyebrow {
+    font-family: var(--font-mono); font-size: var(--fs-caption); letter-spacing: var(--tracking-wide);
+    text-transform: uppercase; color: var(--color-ink-muted); margin: 0 0 var(--space-4); display: block;
+  }
+  .eyebrow { color: var(--accent); }
+  p { margin: 0 0 var(--space-4); }
+
+  /* ---------- NAV ---------- */
+  nav.top {
+    position: fixed; top: 0; left: 0; right: 0; z-index: var(--z-nav);
+    background: color-mix(in srgb, var(--bg) 80%, transparent);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid transparent; transition: border-color var(--dur-base) var(--ease-soft);
+  }
+  nav.top.scrolled { border-bottom-color: var(--color-line); }
+  nav.top .wrap { display: flex; align-items: center; justify-content: space-between; padding-block: var(--space-4); }
+  nav.top .brand { display: flex; align-items: center; gap: var(--space-6); }
+  nav.top .logo { font-family: var(--font-display); font-weight: var(--fw-bold); font-size: 1.15rem; letter-spacing: -0.03em; text-decoration: none; color: var(--fg); }
+  nav.top .back { font-family: var(--font-mono); font-size: var(--fs-caption); letter-spacing: 0.06em; text-transform: uppercase; color: var(--color-ink-muted); text-decoration: none; display: inline-flex; align-items: center; gap: var(--space-2); transition: color var(--dur-fast); }
+  nav.top .back:hover { color: var(--accent); }
+  nav.top .links { display: flex; gap: var(--space-8); }
+  nav.top .links a { color: var(--fg-soft); text-decoration: none; font-size: var(--fs-small); position: relative; transition: color var(--dur-fast); }
+  nav.top .links a::after { content:""; position:absolute; left:0; bottom:-4px; width:0; height:1.5px; background:var(--accent); transition: width var(--dur-base) var(--ease-out); }
+  nav.top .links a:hover { color: var(--accent); }
+  nav.top .links a:hover::after { width:100%; }
+  @media (max-width: 640px){ nav.top .back span.lbl { display:none; } nav.top .links { gap: var(--space-4); } }
+
+  /* ---------- HERO ---------- */
+  .case-hero { padding-top: calc(var(--space-32) + var(--space-8)); padding-bottom: var(--space-16); text-align: center; }
+  .case-hero .eyebrow { margin-bottom: var(--space-6); }
+  .case-hero h1 { font-size: clamp(1.9rem, 1rem + 3.6vw, 3.6rem); max-width: 20ch; margin: 0 auto var(--space-6); font-weight: var(--fw-medium); }
+  .case-hero .lead { font-size: var(--fs-lead); color: var(--fg-soft); max-width: 60ch; margin: 0 auto; line-height: var(--lh-snug); }
+  .hero-shot {
+    margin-top: var(--space-16); aspect-ratio: 16/8; border-radius: var(--radius-lg); overflow: hidden;
+    background: linear-gradient(135deg, var(--color-peri-300), var(--color-clay-300) 60%, var(--color-green-300));
+    box-shadow: var(--shadow-lg); position: relative;
+  }
+  .ph-label {
+    position: absolute; left: var(--space-6); bottom: var(--space-6); color:#fff;
+    font-family: var(--font-mono); font-size: var(--fs-caption); letter-spacing: var(--tracking-wide);
+    text-transform: uppercase; background: rgba(38,34,25,0.34); padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-pill); backdrop-filter: blur(4px);
+  }
+
+  /* ---------- META BAR ---------- */
+  .meta-bar { border-block: 1px solid var(--color-line); }
+  .meta-bar .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--space-8); padding-block: var(--space-8); }
+  .meta-bar .cell .k { font-family: var(--font-mono); font-size: var(--fs-caption); letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-ink-muted); display:block; margin-bottom: var(--space-2); }
+  .meta-bar .cell .v { font-size: var(--fs-small); color: var(--fg); }
+  @media (max-width: 760px){ .meta-bar .grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-6); } }
+
+  /* ---------- SECTIONS ---------- */
+  section { padding-block: var(--space-24); }
+  .phase-head { text-align: center; padding-block: var(--space-24); }
+  .phase-head h2 { font-size: clamp(2rem, 1.2rem + 3vw, 3.25rem); font-weight: var(--fw-medium); }
+  .phase-head .section-label { color: var(--accent); }
+  .phase-head.alt { background: color-mix(in srgb, var(--color-green-100) 50%, var(--color-paper)); border-block: 1px solid var(--color-line); }
+
+  h2.sec { font-size: clamp(1.6rem, 1.1rem + 2vw, 2.4rem); font-weight: var(--fw-medium); margin-bottom: var(--space-8); }
+  h3.sub { font-size: var(--fs-h3); font-weight: var(--fw-semibold); margin-bottom: var(--space-4); }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-16); align-items: start; }
+  .two-col.lean { grid-template-columns: 1.2fr 1fr; }
+  @media (max-width: 860px){ .two-col, .two-col.lean { grid-template-columns: 1fr; gap: var(--space-12); } }
+  .grid-2 { display:grid; grid-template-columns: repeat(2,1fr); gap: var(--space-6); }
+  @media (max-width: 760px){ .grid-2 { grid-template-columns:1fr; } }
+  .prose p { color: var(--fg-soft); max-width: 56ch; }
+
+  /* lists */
+  ul.ul { list-style: none; margin: 0 0 var(--space-4); padding: 0; }
+  ul.ul li { position: relative; padding-left: var(--space-6); color: var(--fg-soft); margin-bottom: var(--space-2); }
+  ul.ul li::before { content:""; position:absolute; left:0; top:0.62em; width:6px; height:6px; border-radius:50%; background: var(--accent-2-bright); }
+
+  /* panel */
+  .panel { background: var(--color-surface); border:1px solid var(--color-line); border-radius: var(--radius-lg); padding: var(--space-8); }
+  .panel h3 { font-size: var(--fs-h4); font-weight: var(--fw-semibold); margin-bottom: var(--space-4); }
+  .panel .section-label { color: var(--accent); }
+  @media (min-width: 861px){
+    .challenge-panel { margin-top: calc(var(--fs-caption) * var(--lh-normal) + var(--space-4) + clamp(1.6rem, 1.1rem + 2vw, 2.4rem) * var(--lh-tight) + var(--space-8)); }
+    .whatiran-col { margin-top: calc(var(--fs-caption) * var(--lh-normal) + var(--space-4) + var(--fs-h3) * var(--lh-tight) + var(--space-4)); }
+    .nav-col { margin-top: calc(var(--fs-caption) * var(--lh-normal) + var(--space-4) + clamp(1.6rem, 1.1rem + 2vw, 2.4rem) * var(--lh-tight) * 2 + var(--space-8)); }
+    .guided-col { margin-top: calc(var(--fs-h3) * var(--lh-tight) + var(--space-4)); }
+  }
+
+  /* survey viz */
+  .survey-viz { border:1px solid var(--color-line); border-radius: var(--radius-lg); padding: var(--space-8); background: var(--color-surface); }
+  .survey-viz .section-label { color: var(--accent); }
+  .stat-row { display:flex; gap: var(--space-12); flex-wrap:wrap; margin-bottom: var(--space-8); }
+  .stat-row .fig { font-family: var(--font-display); font-weight: var(--fw-medium); font-size: clamp(1.8rem, 1rem + 2.4vw, 2.6rem); color: var(--accent); line-height:1; }
+  .stat-row .lab { font-size: var(--fs-caption); color: var(--fg-soft); margin-top: var(--space-2); max-width: 18ch; }
+  .bars { display:flex; flex-direction:column; gap: var(--space-4); }
+  .bar .blab { display:flex; justify-content:space-between; font-size: var(--fs-small); color: var(--fg-soft); margin-bottom: var(--space-2); }
+  .bar .track { height:10px; background: var(--color-line); border-radius: var(--radius-pill); overflow:hidden; }
+  .bar .track i { display:block; height:100%; width:0; background: linear-gradient(90deg, var(--color-peri-500), var(--color-green-500)); border-radius: var(--radius-pill); transition: width var(--dur-reveal) var(--ease-out); }
+  .survey-viz.in .bar .track i { width: var(--w); }
+  .viz-note { font-size: var(--fs-caption); color: var(--color-ink-muted); margin: var(--space-4) 0 0; }
+  .bar .blab .v { color: var(--color-ink-muted); }
+
+  /* survey results grid */
+  .survey-grid { display:grid; grid-template-columns: repeat(2,1fr); gap: var(--space-6); }
+  @media (max-width: 760px){ .survey-grid { grid-template-columns:1fr; } }
+  .chart-card { border:1px solid var(--color-line); border-radius: var(--radius-lg); padding: var(--space-8); background: var(--color-surface); }
+  .chart-card h3 { font-size: var(--fs-h4); font-weight: var(--fw-semibold); line-height: var(--lh-snug); margin-bottom: var(--space-6); }
+  .pie-wrap { display:flex; align-items:center; gap: var(--space-8); flex-wrap:wrap; }
+  .pie { width:150px; height:150px; border-radius:50%; flex:none; opacity:0; transform: scale(.85); transition: opacity var(--dur-reveal) var(--ease-out), transform var(--dur-reveal) var(--ease-out); }
+  .survey-grid.in .pie { opacity:1; transform:none; }
+  .legend { list-style:none; margin:0; padding:0; font-size: var(--fs-small); }
+  .legend li { display:flex; align-items:center; gap: var(--space-2); color: var(--fg-soft); margin-bottom: var(--space-2); }
+  .legend .dot { width:11px; height:11px; border-radius:50%; flex:none; }
+  .survey-grid.in .bar .track i { width: var(--w); }
+
+  /* annotated product page */
+  .annotate { display:grid; grid-template-columns: 1fr 1.1fr; gap: var(--space-16); align-items:start; }
+  @media (max-width: 860px){ .annotate { grid-template-columns:1fr; gap: var(--space-12); } }
+  .anno-media { position:relative; aspect-ratio: 4/5; border-radius: var(--radius-lg); overflow:hidden; border:1px solid var(--color-line); background: linear-gradient(150deg, var(--color-peri-300), var(--color-clay-300) 55%, var(--color-green-300)); }
+  .anno-media .ph-label { left: var(--space-4); bottom: var(--space-4); }
+  .marker { position:absolute; transform: translate(-50%,-50%); width:30px; height:30px; border-radius:50%; background:var(--accent); color:var(--on-accent); display:flex; align-items:center; justify-content:center; font-family: var(--font-display); font-weight: var(--fw-semibold); font-size: var(--fs-small); box-shadow: var(--shadow-md); border: 2px solid var(--color-paper); }
+  .anno-list { list-style:none; margin:0; padding:0; }
+  .anno-item { display:flex; gap: var(--space-4); padding: var(--space-6) 0; border-top:1px solid var(--color-line); }
+  .anno-item:first-child { border-top:none; padding-top:0; }
+  .anno-item .b { flex:none; width:28px; height:28px; border-radius:50%; background:var(--accent); color:var(--on-accent); display:flex; align-items:center; justify-content:center; font-family: var(--font-display); font-weight: var(--fw-semibold); font-size: var(--fs-small); }
+  .anno-item h4 { font-size: var(--fs-h4); font-weight: var(--fw-semibold); margin-bottom: var(--space-2); }
+  .anno-item p { color: var(--fg-soft); margin: 0; }
+  .anno-item .gain { display:inline-block; margin-top: var(--space-3); font-size: var(--fs-small); color: var(--accent-2); font-weight: var(--fw-medium); }
+
+  /* note */
+  .note { border-left: 3px solid var(--accent); padding-left: var(--space-6); }
+  .note p { color: var(--fg-soft); margin: 0; }
+
+  /* statement / pull quote */
+  .statement-block { text-align: center; }
+  .statement-block p { margin: 0; font-family: var(--font-display); font-weight: var(--fw-regular); font-size: clamp(1.4rem, 1rem + 1.6vw, 2.1rem); line-height: var(--lh-snug); color: var(--fg); letter-spacing: -0.02em; max-width: 34ch; margin-inline: auto; }
+  .pull-quote { text-align: center; }
+  .pull-quote blockquote { margin: 0; font-family: var(--font-display); font-weight: var(--fw-regular); font-size: clamp(1.4rem, 1rem + 1.6vw, 2.1rem); line-height: var(--lh-snug); letter-spacing: -0.02em; max-width: 34ch; margin-inline: auto; }
+  .pull-quote cite { display:block; margin-top: var(--space-8); font-style: normal; font-family: var(--font-mono); font-size: var(--fs-caption); text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-ink-muted); }
+
+  /* cards */
+  .cards-3 { display:grid; grid-template-columns: repeat(3,1fr); gap: var(--space-6); }
+  @media (max-width: 860px){ .cards-3 { grid-template-columns:1fr; } }
+  .proc { border:1px solid var(--color-line); border-radius: var(--radius-lg); padding: var(--space-8); background: var(--color-surface); }
+  .proc .step { font-family: var(--font-mono); font-size: var(--fs-caption); text-transform:uppercase; letter-spacing:0.08em; color: var(--accent); margin-bottom: var(--space-3); display:block; }
+  .proc h3 { font-size: var(--fs-h4); font-weight: var(--fw-semibold); margin-bottom: var(--space-3); }
+  .proc p { color: var(--fg-soft); margin: 0; }
+  .proc .n { font-family: var(--font-display); font-weight: var(--fw-medium); font-size: var(--fs-h2); color: var(--accent); line-height:1; display:block; margin-bottom: var(--space-3); }
+
+  /* kv table */
+  .kvtable { border:1px solid var(--color-line); border-radius: var(--radius-lg); overflow:hidden; }
+  .kvtable .r { display:grid; grid-template-columns: 1fr 1.6fr; gap: var(--space-6); padding: var(--space-4) var(--space-6); border-top:1px solid var(--color-line); align-items:baseline; }
+  .kvtable .r.head { border-top:none; background: color-mix(in srgb, var(--color-peri-100) 55%, var(--color-paper)); }
+  .kvtable .r .ht { font-family: var(--font-mono); font-size: var(--fs-caption); text-transform:uppercase; letter-spacing:0.08em; color: var(--color-ink-muted); }
+  .kvtable .r .pt { font-family: var(--font-display); font-weight: var(--fw-semibold); font-size: var(--fs-body); color: var(--fg); }
+  .kvtable .r .op { color: var(--fg-soft); font-size: var(--fs-small); }
+
+  /* flow (pills + arrows) */
+  .flow { display:flex; flex-wrap:wrap; align-items:center; gap: var(--space-3); }
+  .flow .pill { border:1px solid var(--color-line); border-radius: var(--radius-pill); padding: var(--space-3) var(--space-6); font-family: var(--font-display); font-weight: var(--fw-medium); font-size: var(--fs-small); background: var(--color-surface); }
+  .flow .pill.dim { color: var(--color-ink-muted); }
+  .flow .pill.now { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+  .flow .sep { color: var(--accent); font-size: var(--fs-h4); }
+
+  /* quotes */
+  .quotes { display:grid; grid-template-columns: repeat(3,1fr); gap: var(--space-1); }
+  @media (max-width: 860px){ .quotes { grid-template-columns:1fr; } }
+  .qc { background: color-mix(in srgb, var(--color-peri-100) 55%, var(--color-paper)); border:1px solid var(--color-line); border-radius: var(--radius-lg); padding: var(--space-8); }
+  .qc blockquote { margin:0; font-family: var(--font-display); font-weight: var(--fw-regular); font-size: var(--fs-h4); line-height: var(--lh-snug); color: var(--fg); }
+  .qc .mark { font-family: var(--font-display); font-weight: var(--fw-bold); font-size: var(--fs-h2); line-height:0.6; color: var(--accent); display:block; margin-bottom: var(--space-4); }
+
+  /* outcome */
+  .outcome { background: var(--accent); color: var(--on-accent); border-radius: var(--radius-lg); padding: var(--space-16) var(--space-12); text-align:center; }
+  .outcome .section-label { color: color-mix(in srgb, var(--on-accent) 70%, transparent); }
+  .outcome p { margin: 0; font-family: var(--font-display); font-weight: var(--fw-regular); font-size: clamp(1.5rem,1rem+2vw,2.4rem); line-height: var(--lh-snug); letter-spacing:-0.02em; max-width: 26ch; margin-inline:auto; color: var(--on-accent); }
+
+  /* learnings */
+  .learn { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-16); }
+  @media (max-width: 860px){ .learn { grid-template-columns: 1fr; gap: var(--space-12); } }
+  .learn h3 { font-size: var(--fs-h3); font-weight: var(--fw-semibold); margin-bottom: var(--space-4); }
+  .learn p { color: var(--fg-soft); }
+
+  /* media */
+  .media { aspect-ratio: 16/9; border-radius: var(--radius-lg); overflow:hidden; position:relative; border:1px solid var(--color-line); background: linear-gradient(135deg, var(--color-peri-300), var(--color-green-300)); }
+  .media.wide { aspect-ratio: 21/9; }
+
+  /* cta + footer */
+  .case-cta { border-top: 1px solid var(--color-line); text-align: center; padding-block: var(--space-32); }
+  .case-cta h2 { font-size: clamp(1.8rem, 1.1rem + 2.6vw, 3rem); font-weight: var(--fw-medium); margin-bottom: var(--space-8); max-width: 18ch; margin-inline: auto; }
+  .btn { display: inline-flex; align-items: center; gap: var(--space-2); font-weight: var(--fw-medium); font-size: var(--fs-small); padding: var(--space-3) var(--space-6); border-radius: var(--radius-pill); border: 1px solid transparent; text-decoration: none; transition: transform var(--dur-fast) var(--ease-out), background var(--dur-base); }
+  .btn:hover { transform: translateY(-2px); }
+  .btn-primary { background: var(--accent); color: var(--on-accent); }
+  .btn-primary:hover { background: var(--color-peri-500); }
+  .btn-ghost { background: transparent; color: var(--fg); border-color: var(--color-line); }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+  .arrow { display:inline-block; transition: transform var(--dur-base) var(--ease-out); }
+  .btn:hover .arrow { transform: translateX(4px); }
+  footer.foot { border-top: 1px solid var(--color-line); padding-block: var(--space-12); }
+  footer.foot .wrap { display:flex; justify-content: space-between; flex-wrap: wrap; gap: var(--space-4); font-size: var(--fs-small); color: var(--color-ink-muted); }
+  footer.foot a { text-decoration: none; color: var(--fg-soft); }
+  footer.foot a:hover { color: var(--accent); }
+
+  /* reveal */
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity var(--dur-reveal) var(--ease-out), transform var(--dur-reveal) var(--ease-out); }
+  .reveal.in { opacity: 1; transform: none; }
+</style>
+</head>
+<body id="top">
+
+<nav class="top">
+  <div class="wrap">
+    <div class="brand">
+      <a href="index.html" class="logo">Jade Savoia</a>
+      <a href="index.html#work" class="back">← <span class="lbl">All work</span></a>
+    </div>
+    <div class="links">
+      <a href="index.html#work">Work</a>
+      <a href="index.html#about">About</a>
+      <a href="index.html#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="case-hero wrap">
+  <span class="eyebrow reveal">Case Study · Information Architecture · iOS</span>
+  <h1 class="reveal">Designing trust through information architecture</h1>
+  <p class="lead reveal">A redesign of Etsy's iOS buyer experience — restructuring information so shoppers can find what matters faster and feel confident enough to buy.</p>
+  <div class="hero-shot reveal">
+    <span class="ph-label">Hero mockup — replace with project image</span>
+  </div>
+</header>
+
+<!-- META BAR -->
+<section class="meta-bar" style="padding-block:0;">
+  <div class="wrap">
+    <div class="grid">
+      <div class="cell"><span class="k">Client</span><span class="v">Etsy iOS App</span></div>
+      <div class="cell"><span class="k">Role</span><span class="v">Lead UX Designer &amp; Researcher</span></div>
+      <div class="cell"><span class="k">Team</span><span class="v">1 Designer</span></div>
+      <div class="cell"><span class="k">Scope</span><span class="v">Academic Concept Project</span></div>
+      <div class="cell"><span class="k">Duration</span><span class="v">2 Months</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- CHALLENGE -->
+<section class="wrap">
+  <div class="two-col lean">
+    <div class="prose reveal">
+      <span class="section-label">The Challenge</span>
+      <h2 class="sec">Great products, hard to trust</h2>
+      <p>Etsy succeeds because shoppers value uniqueness, craftsmanship, and connection to independent creators. But user interviews revealed that the mobile experience often made those very qualities difficult to discover and trust.</p>
+      <p>Evaluating products required unnecessary effort — creating uncertainty during purchase decisions and increasing the likelihood of abandonment.</p>
+      <div class="note" style="margin-top: var(--space-8);">
+        <span class="section-label">Research question</span>
+        <p style="color:var(--fg-soft); margin:0;">How might we improve Etsy's information architecture to help users find critical information faster and build confidence throughout the shopping experience?</p>
+      </div>
+    </div>
+    <div class="panel reveal challenge-panel">
+      <span class="section-label">Shoppers struggled to find</span>
+      <ul class="ul">
+        <li>Shipping timelines</li>
+        <li>Pricing transparency</li>
+        <li>Seller credibility</li>
+        <li>Product details</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- UNDERSTANDING THE PROBLEM -->
+<div class="phase-head alt reveal"><span class="section-label">Phase 01</span><h2>Understanding the Problem</h2></div>
+
+<section class="wrap">
+  <div class="reveal" style="text-align:center; margin-bottom: var(--space-16);">
+    <span class="section-label">User expectations vs reality</span>
+    <h2 class="sec" style="margin-inline:auto; max-width: 22ch;">A gap between what users wanted and what they got</h2>
+  </div>
+  <div class="grid-2">
+    <div class="panel reveal">
+      <span class="section-label">What users expected</span>
+      <ul class="ul">
+        <li>Unique and handcrafted products</li>
+        <li>Transparent pricing and shipping information</li>
+        <li>Confidence in seller legitimacy</li>
+        <li>A connection to creators and small businesses</li>
+      </ul>
+    </div>
+    <div class="panel reveal">
+      <span class="section-label">What users experienced</span>
+      <ul class="ul">
+        <li>Critical decision-making details appeared below secondary content</li>
+        <li>Navigation patterns fragmented the browsing experience</li>
+        <li>Users frequently felt overwhelmed and uncertain</li>
+        <li>Forced to work harder than necessary to evaluate products</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="two-col lean reveal" style="margin-top: var(--space-24); align-items:start;">
+    <div class="prose">
+      <span class="section-label">How I got there</span>
+      <h3 class="sub">Surveys &amp; user testing</h3>
+      <p>To understand where confidence broke down, I combined what shoppers said with what they actually did — surveying their priorities and pain points, then watching them move through the existing app.</p>
+      <p>Patterns surfaced quickly: people knew what they wanted, but the information they needed to feel sure rarely appeared when they needed it.</p>
+    </div>
+    <div class="prose whatiran-col">
+      <span class="section-label">What I ran</span>
+      <ul class="ul">
+        <li>User interviews with Etsy shoppers</li>
+        <li>Surveys on shopping priorities and pain points</li>
+        <li>Usability testing on the existing app</li>
+        <li>Task-based observation of the buyer journey</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="survey-grid reveal" style="margin-top: var(--space-16);">
+    <div class="chart-card">
+      <h3>How much does detailed product information affect your purchasing decision?</h3>
+      <div class="pie-wrap">
+        <div class="pie" style="background: conic-gradient(var(--color-peri-500) 0 37.5%, var(--color-green-500) 37.5% 62.5%, var(--color-clay-300) 62.5% 87.5%, var(--color-green-300) 87.5% 100%);"></div>
+        <ul class="legend">
+          <li><span class="dot" style="background:var(--color-peri-500)"></span>Very important — 37.5%</li>
+          <li><span class="dot" style="background:var(--color-green-500)"></span>Important — 25%</li>
+          <li><span class="dot" style="background:var(--color-clay-300)"></span>Neutral — 25%</li>
+          <li><span class="dot" style="background:var(--color-green-300)"></span>Unimportant — 12.5%</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <h3>What online stores do you use to find niche, customized, or handmade goods?</h3>
+      <div class="pie-wrap">
+        <div class="pie" style="background: conic-gradient(var(--color-green-700) 0 58%, var(--color-peri-500) 58% 83%, var(--color-clay-300) 83% 91%, var(--color-green-300) 91% 100%);"></div>
+        <ul class="legend">
+          <li><span class="dot" style="background:var(--color-green-700)"></span>Etsy — 58%</li>
+          <li><span class="dot" style="background:var(--color-peri-500)"></span>Amazon — 25%</li>
+          <li><span class="dot" style="background:var(--color-clay-300)"></span>Depop — 8%</li>
+          <li><span class="dot" style="background:var(--color-green-300)"></span>Facebook — 8%</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <h3>When making a purchase, what are the 3 largest deciding factors?</h3>
+      <div class="bars">
+        <div class="bar" style="--w:100%"><div class="blab"><span>Price</span><span class="v">100%</span></div><div class="track"><i></i></div></div>
+        <div class="bar" style="--w:87.5%"><div class="blab"><span>Quality</span><span class="v">87.5%</span></div><div class="track"><i></i></div></div>
+        <div class="bar" style="--w:37.5%"><div class="blab"><span>Personal taste</span><span class="v">37.5%</span></div><div class="track"><i></i></div></div>
+        <div class="bar" style="--w:37.5%"><div class="blab"><span>Need</span><span class="v">37.5%</span></div><div class="track"><i></i></div></div>
+        <div class="bar" style="--w:12.5%"><div class="blab"><span>Convenience</span><span class="v">12.5%</span></div><div class="track"><i></i></div></div>
+        <div class="bar" style="--w:12.5%"><div class="blab"><span>Brand</span><span class="v">12.5%</span></div><div class="track"><i></i></div></div>
+        <div class="bar" style="--w:12.5%"><div class="blab"><span>Trends</span><span class="v">12.5%</span></div><div class="track"><i></i></div></div>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <h3>How often do you research products before you buy them?</h3>
+      <div class="bars">
+        <div class="bar" style="--w:57%"><div class="blab"><span>Often</span><span class="v">57%</span></div><div class="track"><i></i></div></div>
+        <div class="bar" style="--w:28%"><div class="blab"><span>Always</span><span class="v">28%</span></div><div class="track"><i></i></div></div>
+        <div class="bar" style="--w:14%"><div class="blab"><span>Sometimes</span><span class="v">14%</span></div><div class="track"><i></i></div></div>
+        <div class="bar" style="--w:0%"><div class="blab"><span>Rarely</span><span class="v">0%</span></div><div class="track"><i></i></div></div>
+        <div class="bar" style="--w:0%"><div class="blab"><span>Never</span><span class="v">0%</span></div><div class="track"><i></i></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pull-quote narrow reveal" style="margin-top: var(--space-24);">
+    <span class="section-label" style="color:var(--accent);">Key insight</span>
+    <blockquote>Trust, not discovery, became the primary design problem. Etsy users are willing to invest more time and money for unique products when they feel confident in what they're buying.</blockquote>
+  </div>
+
+  <div class="media wide reveal" style="margin-top: var(--space-16);">
+    <span class="ph-label">Persona &amp; supporting research artifacts</span>
+  </div>
+</section>
+
+<!-- DESIGN GOALS -->
+<div class="phase-head alt reveal"><span class="section-label">Phase 02</span><h2>Design Goals</h2></div>
+
+<section class="wrap">
+  <div class="reveal" style="text-align:center; margin-bottom: var(--space-16);">
+    <h2 class="sec" style="margin-inline:auto; max-width: 24ch;">Research findings translated into four objectives</h2>
+  </div>
+  <div class="grid-2">
+    <div class="proc reveal"><span class="step">01 · Transparency</span><h3>Increase transparency</h3><p>Surface pricing, shipping, and seller information earlier in the journey.</p></div>
+    <div class="proc reveal"><span class="step">02 · Navigation</span><h3>Simplify navigation</h3><p>Reduce cognitive load by aligning navigation with real user behavior.</p></div>
+    <div class="proc reveal"><span class="step">03 · Discovery</span><h3>Support product discovery</h3><p>Help users start browsing with greater confidence and direction.</p></div>
+    <div class="proc reveal"><span class="step">04 · Modernize</span><h3>Modernize the experience</h3><p>Create a consistent, accessible, iOS-native system while preserving Etsy's brand identity.</p></div>
+  </div>
+</section>
+
+<!-- CONSTRAINTS -->
+<section class="wrap" style="padding-top:0;">
+  <div class="reveal">
+    <h3 class="sub" style="margin-bottom: var(--space-8);">Project constraints</h3>
+    <div class="kvtable">
+      <div class="r head"><span class="ht">Scope</span><span class="ht">Constraint</span></div>
+      <div class="r"><span class="pt">iOS mobile experience</span><span class="op">Buyer journey only</span></div>
+      <div class="r"><span class="pt">Academic concept project</span><span class="op">No backend changes</span></div>
+      <div class="r"><span class="pt">Existing brand system</span><span class="op">Preserve Etsy's established identity</span></div>
+      <div class="r"><span class="pt">Information architecture focus</span><span class="op">Prioritize structure over feature expansion</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- REBUILDING IA -->
+<div class="phase-head alt reveal"><span class="section-label">Phase 03</span><h2>Rebuilding the Information Architecture</h2></div>
+
+<section class="wrap">
+  <div class="two-col lean reveal" style="align-items:start;">
+    <div class="prose">
+      <span class="section-label">Simplifying navigation around behavior</span>
+      <h2 class="sec">From scattered sections to one place to Discover</h2>
+      <p>Related experiences were scattered across multiple destinations, forcing users to jump between sections to accomplish a single task. The redesign consolidated Shop, Explore, and For You into a unified Discover experience, and merged Messaging with Notifications to match how users actually communicate with sellers.</p>
+    </div>
+    <div class="prose nav-col">
+      <span class="section-label">Additional navigation improvements</span>
+      <ul class="ul">
+        <li>Favorites renamed to Collections</li>
+        <li>Collections moved into the profile experience</li>
+        <li>Simplified "You" section with clearer hierarchy</li>
+        <li>Reduced navigation clutter</li>
+        <li>Fewer competing actions in primary navigation</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="media wide reveal" style="margin-top: var(--space-16);">
+    <span class="ph-label">Before / after sitemap comparison</span>
+  </div>
+</section>
+
+<!-- REDESIGN -->
+<div class="phase-head alt reveal"><span class="section-label">Phase 04</span><h2>Redesign</h2></div>
+
+<section class="wrap">
+  <div class="two-col lean reveal" style="align-items:start;">
+    <div class="prose">
+      <h3 class="sub">Guided discovery</h3>
+      <p>Many users knew what they wanted but struggled to determine how to search for it. To reduce "blank canvas" friction, keyword-driven search suggestions were introduced directly within the search experience.</p>
+    </div>
+    <div class="prose guided-col">
+      <span class="section-label">This supported both</span>
+      <ul class="ul">
+        <li>Intent-driven shoppers</li>
+        <li>Inspiration-driven browsers</li>
+      </ul>
+      <p style="color:var(--fg-soft); margin:0;">…with immediate entry points into relevant categories and products.</p>
+    </div>
+  </div>
+  <div class="media reveal" style="margin-top: var(--space-16);">
+    <span class="ph-label">Search flow examples</span>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="reveal" style="margin-bottom: var(--space-16); max-width: 60ch;">
+    <span class="section-label">Restructuring the product page</span>
+    <h2 class="sec" style="max-width: 22ch;">Reordering the page around how people decide</h2>
+    <p style="color:var(--fg-soft);">Research showed three factors consistently drove purchase confidence — price, shipping, and ratings. The product page was rebuilt to surface them first and give sellers real presence, so the information people needed appeared exactly when they were evaluating.</p>
+  </div>
+
+  <div class="annotate reveal">
+    <div class="anno-media">
+      <span class="ph-label">Product page before / after</span>
+      <span class="marker" style="top:16%; left:10%;">1</span>
+      <span class="marker" style="top:34%; left:10%;">2</span>
+      <span class="marker" style="top:52%; left:10%;">3</span>
+      <span class="marker" style="top:72%; left:10%;">4</span>
+    </div>
+    <ul class="anno-list">
+      <li class="anno-item">
+        <span class="b">1</span>
+        <div>
+          <h4>Price moved beneath the product image</h4>
+          <p>The #1 deciding factor now appears before any secondary content.</p>
+          <span class="gain">→ Faster evaluation, far less scrolling</span>
+        </div>
+      </li>
+      <li class="anno-item">
+        <span class="b">2</span>
+        <div>
+          <h4>Shipping surfaced early</h4>
+          <p>Timelines and cost sit alongside price instead of buried lower on the page.</p>
+          <span class="gain">→ Removes a top source of uncertainty</span>
+        </div>
+      </li>
+      <li class="anno-item">
+        <span class="b">3</span>
+        <div>
+          <h4>Ratings &amp; reviews elevated</h4>
+          <p>Social proof is visible at the exact moment of evaluation.</p>
+          <span class="gain">→ Builds confidence before the decision</span>
+        </div>
+      </li>
+      <li class="anno-item">
+        <span class="b">4</span>
+        <div>
+          <h4>Seller visibility strengthened</h4>
+          <p>Enhanced shop profiles, seller tags and specialties, and clearer creator information.</p>
+          <span class="gain">→ Reinforces buying from real people, not anonymous storefronts</span>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="reveal" style="max-width:60ch;">
+    <span class="section-label">Visual design</span>
+    <h2 class="sec">Modern, familiar, and built for accessibility</h2>
+    <p style="color:var(--fg-soft);">The visual system was updated to match current social media and e-commerce design trends, using styles that users already know from other platforms. Typography, color, and component design were refined to create a unified, accessible experience that feels natural on iOS and modern — while still keeping Etsy's warmth and character.</p>
+  </div>
+  <div class="media wide reveal" style="margin-top: var(--space-16);">
+    <span class="ph-label">Visual design / UI components</span>
+  </div>
+</section>
+
+<!-- DESIGNING FOR FAMILIARITY -->
+<section class="wrap">
+  <div class="two-col lean reveal" style="align-items:start;">
+    <div class="prose">
+      <span class="section-label">Design systems as a trust tool</span>
+      <h2 class="sec">Predictable, not reinvented</h2>
+      <p>The visual system was modernized using interaction patterns familiar from contemporary mobile and e-commerce platforms. The goal wasn't to redesign Etsy's personality — but to create a more predictable, trustworthy environment for completing purchases.</p>
+    </div>
+    <div class="panel">
+      <span class="section-label">Updates included</span>
+      <ul class="ul">
+        <li>Refined typography</li>
+        <li>Consistent component design</li>
+        <li>Improved accessibility</li>
+        <li>Cleaner visual hierarchy</li>
+        <li>Stronger iOS conventions</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- VALIDATION -->
+<div class="phase-head alt reveal"><span class="section-label">Phase 05</span><h2>Validation</h2></div>
+
+<section class="wrap">
+  <div class="two-col lean reveal" style="align-items:start;">
+    <div class="prose">
+      <span class="section-label">Rebuilding trust through clarity</span>
+      <h2 class="sec">Testing the redesigned flows</h2>
+      <p>After completing the redesign, users worked through updated task flows. Improving structure and hierarchy significantly reduced uncertainty throughout the shopping experience.</p>
+    </div>
+    <div class="panel">
+      <span class="section-label">Participants consistently reported</span>
+      <ul class="ul">
+        <li>Improved navigation confidence</li>
+        <li>Better awareness of available features</li>
+        <li>Easier orientation throughout the experience</li>
+        <li>Faster access to decision-making information</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="reveal" style="margin-top: var(--space-24);">
+    <span class="section-label">User feedback</span>
+    <div class="quotes" style="margin-top: var(--space-6);">
+      <figure class="qc"><span class="mark" aria-hidden="true">“</span><blockquote>This feels familiar, like I understand how it's going to work.</blockquote></figure>
+      <figure class="qc"><span class="mark" aria-hidden="true">“</span><blockquote>It's easier to understand where I am.</blockquote></figure>
+      <figure class="qc"><span class="mark" aria-hidden="true">“</span><blockquote>I didn't even know this feature existed before.</blockquote></figure>
+    </div>
+  </div>
+</section>
+
+<!-- IMPACT -->
+<div class="phase-head reveal"><span class="section-label">Outcome</span><h2>Impact</h2></div>
+
+<section class="wrap" style="padding-top:0;">
+  <div class="two-col lean reveal" style="align-items:start;">
+    <div class="prose">
+      <h3 class="sub">The result</h3>
+      <p>Rather than introducing new functionality, the project focused on making existing information easier to discover, evaluate, and understand.</p>
+    </div>
+    <ul class="ul">
+      <li>Faster product evaluation</li>
+      <li>Reduced cognitive load</li>
+      <li>Greater seller visibility</li>
+      <li>Increased user confidence</li>
+      <li>Stronger alignment with Etsy's core value proposition</li>
+    </ul>
+  </div>
+</section>
+
+<!-- WHAT I LEARNED -->
+<div class="phase-head reveal"><h2>What I learned from this project</h2></div>
+
+<section class="wrap" style="padding-top:0;">
+  <div class="narrow reveal">
+    <p style="color:var(--fg-soft);">The deeper I explored the product, the more I realized this wasn't a navigation problem — it was a trust problem. Users weren't struggling because Etsy lacked features. They were struggling because the information they needed to make confident decisions wasn't appearing at the right moment.</p>
+  </div>
+  <div class="pull-quote narrow reveal" style="margin-top: var(--space-16);">
+    <blockquote>Information architecture isn't just about organization. It's about helping people feel confident enough to take action.</blockquote>
+  </div>
+  <div class="narrow reveal" style="margin-top: var(--space-16);">
+    <p style="color:var(--fg-soft);">The most impactful design decisions often aren't new features — they're the structural changes that make existing experiences easier to understand, trust, and enjoy.</p>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="case-cta">
+  <div class="wrap">
+    <h2 class="reveal">Like what you see? Let's make something together.</h2>
+    <div class="reveal" style="display:flex; gap:var(--space-4); justify-content:center; flex-wrap:wrap;">
+      <a class="btn btn-primary" href="index.html#contact">Get in touch <span class="arrow">→</span></a>
+      <a class="btn btn-ghost" href="index.html#work">View more work</a>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="wrap">
+    <span>© 2026 Jade Savoia. All rights reserved.</span>
+    <a href="index.html">Back to home →</a>
+  </div>
+</footer>
+
+<script>
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function countUp(el){
+    const to = parseFloat(el.dataset.to); const suf = el.dataset.suffix || '';
+    if (reduce){ el.textContent = to + suf; return; }
+    const dur = 1000, start = performance.now();
+    function tick(now){
+      const p = Math.min((now - start) / dur, 1);
+      const eased = 0.5 - Math.cos(Math.PI * p) / 2;
+      el.textContent = Math.round(to * eased) + suf;
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        e.target.querySelectorAll('.countup').forEach(c => { if(!c.dataset.done){ c.dataset.done = '1'; countUp(c); } });
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  const nav = document.querySelector('nav.top');
+  const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 8);
+  onScroll(); window.addEventListener('scroll', onScroll, { passive: true });
+</script>
+</body>
+</html>

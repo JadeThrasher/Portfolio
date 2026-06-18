@@ -1,0 +1,125 @@
+/* ============================================================
+   JADE — PORTFOLIO DESIGN TOKENS
+   Direction: Contemporary · Primary: periwinkle · Secondary: earthy green
+   Drop this file into your build and reference the variables.
+   ============================================================ */
+
+:root {
+  /* ---------- COLOR ---------- */
+  /* Warm neutral canvas — bright, almost-white with a warm cast */
+  --color-paper:        #FDFCF8; /* page background, warm near-white */
+  --color-surface:      #FFFFFF; /* cards, raised surfaces */
+  --color-surface-warm: #F8F4EC; /* alternating sections, subtle warmth */
+  --color-line:         #ECE6D9; /* hairlines, dividers, borders */
+
+  /* Ink — warm near-black, never pure #000 */
+  --color-ink:          #262219; /* primary text */
+  --color-ink-soft:     #57513F; /* secondary text */
+  --color-ink-muted:    #918A78; /* captions, meta, placeholders */
+
+  /* Earthy green — SECONDARY accent, brighter & fresher */
+  --color-green-900:    #354227;
+  --color-green-700:    #51683C; /* primary actions, accent text */
+  --color-green-500:    #7CA15A; /* core brand green, vivid */
+  --color-green-300:    #AAC586; /* sage, soft fills */
+  --color-green-100:    #E7EFD6; /* tints, backgrounds */
+
+  /* Periwinkle — PRIMARY accent, brighter */
+  --color-peri-700:     #6065C8;
+  --color-peri-500:     #8D92F0; /* core periwinkle, luminous */
+  --color-peri-300:     #BCBFF7; /* soft */
+  --color-peri-100:     #ECEDFD; /* tints, backgrounds */
+
+  /* Clay — warm supporting tone, brighter */
+  --color-clay-500:     #E08A5F;
+  --color-clay-300:     #F3C6AA;
+
+  /* Semantic roles */
+  --bg:                 var(--color-paper);
+  --bg-alt:             var(--color-surface-warm);
+  --fg:                 var(--color-ink);
+  --fg-soft:            var(--color-ink-soft);
+  --accent:             var(--color-peri-700);   /* PRIMARY — periwinkle */
+  --accent-bright:      var(--color-peri-500);   /* luminous fills, gradients */
+  --accent-2:           var(--color-green-700);  /* SECONDARY — earthy green */
+  --accent-2-bright:    var(--color-green-500);
+  --on-accent:          #FDFCF8;
+
+  /* ---------- TYPOGRAPHY ---------- */
+  /* Display: Space Grotesk (modern grotesk) · Body: Inter (clean sans) */
+  --font-display: "Space Grotesk", "Inter", system-ui, -apple-system, sans-serif;
+  --font-body:    "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono:    "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
+
+  /* Fluid type scale (min · preferred · max) */
+  --fs-display:   clamp(3rem, 1.5rem + 7.5vw, 8rem);     /* hero statements */
+  --fs-h1:        clamp(2.5rem, 1.6rem + 4.5vw, 5rem);
+  --fs-h2:        clamp(2rem, 1.4rem + 3vw, 3.5rem);
+  --fs-h3:        clamp(1.5rem, 1.2rem + 1.5vw, 2.25rem);
+  --fs-h4:        clamp(1.25rem, 1.1rem + 0.75vw, 1.5rem);
+  --fs-lead:      clamp(1.125rem, 1rem + 0.6vw, 1.5rem);  /* intro paragraphs */
+  --fs-body:      1.0625rem;   /* 17px */
+  --fs-small:     0.875rem;
+  --fs-caption:   0.75rem;     /* labels, eyebrows, meta */
+
+  --lh-tight:     1.04;        /* display headlines */
+  --lh-snug:      1.15;
+  --lh-normal:    1.6;         /* body copy */
+
+  --tracking-tight:  -0.035em;  /* tight modern display headlines */
+  --tracking-normal: 0;
+  --tracking-wide:   0.14em;    /* eyebrows / all-caps labels */
+
+  --fw-light:    300;
+  --fw-regular:  400;
+  --fw-medium:   500;
+  --fw-semibold: 600;
+  --fw-bold:     700;          /* Space Grotesk display weight */
+  --fw-black:    700;          /* alias — Space Grotesk tops out at 700 */
+
+  /* ---------- SPACING (4px base) ---------- */
+  --space-1:  0.25rem;   /* 4  */
+  --space-2:  0.5rem;    /* 8  */
+  --space-3:  0.75rem;   /* 12 */
+  --space-4:  1rem;      /* 16 */
+  --space-6:  1.5rem;    /* 24 */
+  --space-8:  2rem;      /* 32 */
+  --space-12: 3rem;      /* 48 */
+  --space-16: 4rem;      /* 64 */
+  --space-24: 6rem;      /* 96 */
+  --space-32: 8rem;      /* 128 */
+  --space-40: 10rem;     /* 160 — generous section rhythm */
+
+  --container:      1280px;  /* max content width */
+  --container-text: 720px;   /* readable prose measure */
+  --gutter:         clamp(1.25rem, 5vw, 4rem);
+
+  /* ---------- RADII ---------- */
+  --radius-sm:   6px;
+  --radius-md:   14px;
+  --radius-lg:   28px;
+  --radius-pill: 999px;
+
+  /* ---------- SHADOWS (warm-tinted, soft) ---------- */
+  --shadow-sm: 0 1px 2px rgba(34, 31, 26, 0.06);
+  --shadow-md: 0 8px 24px rgba(34, 31, 26, 0.08);
+  --shadow-lg: 0 24px 60px rgba(34, 31, 26, 0.12);
+
+  /* ---------- MOTION ---------- */
+  --dur-fast:   160ms;
+  --dur-base:   320ms;
+  --dur-slow:   600ms;
+  --dur-reveal: 900ms;       /* scroll-in reveals */
+  --ease-out:   cubic-bezier(0.16, 1, 0.3, 1);   /* expressive ease-out */
+  --ease-soft:  cubic-bezier(0.4, 0, 0.2, 1);    /* standard */
+
+  /* ---------- LAYERS ---------- */
+  --z-nav: 100;
+  --z-overlay: 200;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 0ms; --dur-base: 0ms; --dur-slow: 0ms; --dur-reveal: 0ms;
+  }
+}
