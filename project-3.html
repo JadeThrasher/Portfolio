@@ -57,10 +57,11 @@
   .case-hero h1 { font-size: clamp(1.9rem, 1rem + 3.6vw, 3.6rem); max-width: 22ch; margin: 0 auto var(--space-6); font-weight: var(--fw-medium); }
   .case-hero .lead { font-size: var(--fs-lead); color: var(--fg-soft); max-width: 60ch; margin: 0 auto; line-height: var(--lh-snug); }
   .hero-shot {
-    margin-top: var(--space-16); aspect-ratio: 16/8; border-radius: var(--radius-lg); overflow: hidden;
+    margin-top: var(--space-16); aspect-ratio: 4277/1909; border-radius: var(--radius-lg); overflow: hidden;
     background: linear-gradient(135deg, var(--color-peri-500), var(--color-green-300) 60%, var(--color-clay-300));
     box-shadow: var(--shadow-lg); position: relative;
   }
+  .hero-shot img { width:100%; height:100%; object-fit:cover; display:block; }
   .ph-label {
     position: absolute; left: var(--space-6); bottom: var(--space-6); color:#fff;
     font-family: var(--font-mono); font-size: var(--fs-caption); letter-spacing: var(--tracking-wide);
@@ -110,6 +111,7 @@
   .media.alt2 { background: linear-gradient(135deg, var(--color-green-500), var(--color-peri-300)); }
   .media.alt3 { background: linear-gradient(135deg, var(--color-clay-300), var(--color-peri-500)); }
   .media.alt4 { background: linear-gradient(135deg, var(--color-peri-500), var(--color-clay-500)); }
+  .media img, .media video { width:100%; height:100%; object-fit:cover; display:block; background: var(--color-ink); }
   .row .body h3 { font-size: var(--fs-h3); font-weight: var(--fw-semibold); margin-bottom: var(--space-4); }
   .row .body p { color: var(--fg-soft); max-width: 48ch; }
   .value-cols { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-8); margin-top: var(--space-8); }
@@ -185,7 +187,7 @@
   <h1 class="reveal">Creating ease through consolidation and a purposeful design system</h1>
   <p class="lead reveal">Unifying a fragmented digital landscape for one of the nation's largest Protestant churches.</p>
   <div class="hero-shot reveal">
-    <span class="ph-label">Hero mockup — replace with project image</span>
+    <img src="images/pcusa-hero.png" alt="Presbyterian Church (USA) website — hero mockup">
   </div>
 </header>
 
@@ -260,7 +262,7 @@
         <div><div class="k">Emotional values</div><div class="v">Belonging · Reverent · Approachable</div></div>
       </div>
     </div>
-    <div class="media alt2"><span class="ph-label">Brand &amp; moodboard collage</span></div>
+    <div class="media alt2"><img src="images/PCUSA%20moodboard.png" alt="Brand voice and moodboard collage"></div>
   </div>
 </section>
 
@@ -273,7 +275,7 @@
 
 <section class="wrap">
   <div class="row reverse reveal">
-    <div class="media alt3"><span class="ph-label">Design system / ADA spec</span></div>
+    <div class="media alt3"><img src="images/PCUSA%20Ada.png" alt="ADA compliance — design system spec"></div>
     <div class="body">
       <h3>ADA compliance as scope clarity</h3>
       <p>We used WCAG criteria as guardrails to bound the design and resolve ambiguity. Accessibility wasn't a final pass — it defined color, type, spacing, contrast, and interaction patterns from the start.</p>
@@ -287,7 +289,7 @@
       <h3>User personas as feature filters</h3>
       <p>We built personas grounded in the research and used them as filters for every feature: would this serve Sandra trying to find a resource on her phone between meetings? If not, it didn't ship.</p>
     </div>
-    <div class="media alt4"><span class="ph-label">Persona card — Sandra Heiple</span></div>
+    <div class="media alt4"><img src="images/PCUSA%20persona.png" alt="User persona card"></div>
   </div>
 </section>
 
@@ -296,7 +298,7 @@
 
 <section class="wrap">
   <div class="row reverse reveal">
-    <div class="media alt2"><span class="ph-label">Daily lectionary page</span></div>
+    <div class="media alt2"><img src="images/Daily%20Lectonary.png" alt="Daily lectionary page"></div>
     <div class="body">
       <h3>The daily lectionary: clarity at the most-visited page</h3>
       <p>The lectionary is the single most-visited page — and the most navigation-heavy. We rebuilt it around a clear daily-reading hierarchy so the highest-traffic moment became the simplest one.</p>
@@ -310,13 +312,13 @@
       <h3>Resources, restructured</h3>
       <p>We redesigned the resources section with a smart, consistent layout and unified search so the largest, densest part of the site became scannable. Filtering and clear taxonomy replaced guesswork.</p>
     </div>
-    <div class="media alt3"><span class="ph-label">Resource library grid</span></div>
+    <div class="media alt3"><img src="images/PCUSA%20resources.png" alt="Resource library grid"></div>
   </div>
 </section>
 
 <section class="wrap">
   <div class="row reverse reveal">
-    <div class="media alt4"><span class="ph-label">Site-wide search UI</span></div>
+    <div class="media alt4"><video src="images/pcusa-search.mp4" autoplay muted loop playsinline></video></div>
     <div class="body">
       <h3>Site-wide search: flexible by design</h3>
       <p>Search now spans the whole ecosystem with type-ahead, scoped results, and forgiving queries — so people land on what they need whether they know the exact term or not.</p>
@@ -330,7 +332,7 @@
       <h3>Navigation to find every need</h3>
       <p>We reframed the navigation around real intent, not internal org structure — surfacing the most common journeys and giving every audience a clear, predictable path to what they came for.</p>
     </div>
-    <div class="media alt2"><span class="ph-label">Global navigation system</span></div>
+    <div class="media alt2"><img src="images/PCUSA%20Navigation.png" alt="Global navigation system"></div>
   </div>
 </section>
 

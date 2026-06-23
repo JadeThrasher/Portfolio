@@ -169,6 +169,7 @@
   .feature:nth-child(3) .f-media { background: linear-gradient(135deg, var(--color-green-500), var(--color-peri-300)); }
   .feature:nth-child(4) .f-media { background: linear-gradient(135deg, var(--color-clay-500), var(--color-peri-500)); }
   .f-media .f-inner { position: absolute; inset: 0; transition: transform var(--dur-slow) var(--ease-out); }
+  .f-media .f-inner img { width:100%; height:100%; object-fit:cover; display:block; }
   .feature:hover .f-media .f-inner { transform: scale(1.04); }
   .f-media .badge {
     position: absolute; top: var(--space-6); left: var(--space-6);
@@ -203,7 +204,8 @@
   @media (max-width: 820px){ .about .grid { grid-template-columns: 1fr; gap: var(--space-12); } }
   .about p { color: var(--fg-soft); max-width: 56ch; }
   .about p + p { margin-top: var(--space-6); }
-  .portrait { aspect-ratio: 3/4; border-radius: var(--radius-lg); background: linear-gradient(160deg, var(--color-peri-300), var(--color-green-300)); border: 1px solid var(--color-line); }
+  .portrait { aspect-ratio: 3/4; border-radius: var(--radius-lg); overflow: hidden; background: linear-gradient(160deg, var(--color-peri-300), var(--color-green-300)); border: 1px solid var(--color-line); }
+  .portrait img { width:100%; height:100%; object-fit:cover; display:block; }
 
   /* reviews */
   .reviews { margin-top: var(--space-24); }
@@ -273,19 +275,19 @@
 <!-- FEATURED WORK -->
 <section id="work" class="wrap">
   <div class="features">
-    <a class="feature reveal" href="project.html">
-      <div class="f-media"><div class="f-inner"></div><span class="badge">UX Research</span></div>
+    <a class="feature reveal" href="project-3.html">
+      <div class="f-media"><div class="f-inner"><img src="images/pcusa-hero.png" alt="Church consolidation case study cover"></div><span class="badge">Web · Design System</span></div>
       <div class="f-body">
         <span class="num">01</span>
-        <h3 class="title">Activate Games</h3>
-        <p class="desc">A discovery &amp; strategy engagement evaluating whether a native mobile app was the right investment — and where the real growth opportunities were.</p>
-        <div class="tags"><span class="tag">Research</span><span class="tag">Strategy</span><span class="tag">Product</span></div>
+        <h3 class="title">Church consolidation</h3>
+        <p class="desc">Unifying a fragmented digital landscape into one accessible platform — and a purposeful design system — for one of the nation's largest Protestant churches.</p>
+        <div class="tags"><span class="tag">Web</span><span class="tag">Design System</span><span class="tag">Accessibility</span></div>
         <span class="view">View project <span class="arrow">→</span></span>
       </div>
     </a>
 
     <a class="feature reveal" href="project-2.html">
-      <div class="f-media"><div class="f-inner"></div><span class="badge">iOS · IA</span></div>
+      <div class="f-media"><div class="f-inner"><img src="images/etsy-hero.jpg" alt="Etsy iOS redesign case study cover"></div><span class="badge">iOS · IA</span></div>
       <div class="f-body">
         <span class="num">02</span>
         <h3 class="title">Etsy iOS redesign</h3>
@@ -295,27 +297,17 @@
       </div>
     </a>
 
-    <a class="feature reveal" href="project-3.html">
-      <div class="f-media"><div class="f-inner"></div><span class="badge">Web · Design System</span></div>
+    <a class="feature reveal" href="project.html">
+      <div class="f-media"><div class="f-inner"><img src="images/activate-hero.png" alt="Activate Games case study cover"></div><span class="badge">UX Research</span></div>
       <div class="f-body">
         <span class="num">03</span>
-        <h3 class="title">Church consolidation</h3>
-        <p class="desc">Unifying a fragmented digital landscape into one accessible platform — and a purposeful design system — for one of the nation's largest Protestant churches.</p>
-        <div class="tags"><span class="tag">Web</span><span class="tag">Design System</span><span class="tag">Accessibility</span></div>
+        <h3 class="title">Activate Games</h3>
+        <p class="desc">A discovery &amp; strategy engagement evaluating whether a native mobile app was the right investment — and where the real growth opportunities were.</p>
+        <div class="tags"><span class="tag">Research</span><span class="tag">Strategy</span><span class="tag">Product</span></div>
         <span class="view">View project <span class="arrow">→</span></span>
       </div>
     </a>
 
-    <a class="feature reveal" href="project-4.html">
-      <div class="f-media"><div class="f-inner"></div><span class="badge">Product &amp; Motion</span></div>
-      <div class="f-body">
-        <span class="num">04</span>
-        <h3 class="title">Tactile commerce</h3>
-        <p class="desc">A shopping flow where motion and micro-interactions give digital products real-world weight.</p>
-        <div class="tags"><span class="tag">Product</span><span class="tag">Motion</span><span class="tag">Commerce</span></div>
-        <span class="view">View project <span class="arrow">→</span></span>
-      </div>
-    </a>
   </div>
 
 </section>
@@ -324,48 +316,20 @@
 <section id="about" class="about">
   <div class="wrap">
     <div class="grid">
-      <div class="portrait reveal" aria-hidden="true"></div>
+      <div class="portrait reveal"><img src="images/jade-savoia.jpg" alt="Jade Savoia"></div>
       <div class="reveal d1">
         <span class="section-label">About</span>
         <h2 class="h2" style="margin-bottom: var(--space-8); max-width: 18ch; font-size: clamp(1.25rem, 0.7rem + 2.2vw, 2.2rem); font-weight: var(--fw-medium);">Hi, I'm Jade — a digital creative.</h2>
-        <p>I'm passionate about accessible and engaging designs that remind us of the real world. My work pairs careful craft with a warmth that makes digital products feel less like screens and more like places.</p>
-        <p>I design across brand, product, and web — from systems and interfaces to the motion and details that make them memorable. I care about making things that work for everyone, and that feel good to use.</p>
+        <p>I'm a digital designer who believes great design should be beautiful and accessible — because experiences worth crafting are experiences worth sharing with everyone. (Big fan of the curb-cut mentality, and if you aren't familiar I'm always willing to talk about it! Please ask :) )</p>
+        <p>A true Renaissance woman, I don't clock out of creativity after work. I spin my own yarn on a drop spindle, crochet (which I've been doing for more than 20 years), and knit (sort of — my hands haven't figured this one out yet). Outside, I'm nurturing an herb garden and a soft spot for native wildflowers.</p>
+        <p>When I'm not designing, I'm competing. I'm a passionate West Coast Swing dancer who travels to hit the dance floor and compete! I'm equally at home on a hiking trail, around a table full of good food, or deep in conversation with people who light me up.</p>
+        <p>I share my life with a majestic Samoyed and three cats who tolerate my crafting projects with varying degrees of enthusiasm.</p>
         <div class="btn-row" style="margin-top: var(--space-12);">
           <a class="btn btn-primary" href="#contact">Get in touch <span class="arrow">→</span></a>
         </div>
       </div>
     </div>
 
-    <!-- REVIEWS -->
-    <div class="reviews reveal">
-      <span class="section-label">What people say</span>
-      <div class="grid-r">
-        <figure class="review">
-          <span class="quote-mark" aria-hidden="true">“</span>
-          <blockquote class="quote">Jade brings rare clarity to messy problems. She made our product feel effortless and genuinely accessible — our users noticed immediately.</blockquote>
-          <figcaption class="author">
-            <span class="avatar" aria-hidden="true"></span>
-            <span class="who"><span class="name">Alex Rivera</span><span class="role-r">Product Lead, Northwind</span></span>
-          </figcaption>
-        </figure>
-        <figure class="review">
-          <span class="quote-mark" aria-hidden="true">“</span>
-          <blockquote class="quote">One of the best collaborators I've worked with. She translates between design, product, and engineering so the whole team moves faster.</blockquote>
-          <figcaption class="author">
-            <span class="avatar" aria-hidden="true"></span>
-            <span class="who"><span class="name">Priya Shah</span><span class="role-r">Engineering Manager, Lumen</span></span>
-          </figcaption>
-        </figure>
-        <figure class="review">
-          <span class="quote-mark" aria-hidden="true">“</span>
-          <blockquote class="quote">Thoughtful, systematic, and a joy to work with. Jade's design system gave our brand a consistency we'd been chasing for years.</blockquote>
-          <figcaption class="author">
-            <span class="avatar" aria-hidden="true"></span>
-            <span class="who"><span class="name">Marcus Lee</span><span class="role-r">Founder, Field &amp; Co.</span></span>
-          </figcaption>
-        </figure>
-      </div>
-    </div>
   </div>
 </section>
 

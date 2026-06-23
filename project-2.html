@@ -56,10 +56,11 @@
   .case-hero h1 { font-size: clamp(1.9rem, 1rem + 3.6vw, 3.6rem); max-width: 20ch; margin: 0 auto var(--space-6); font-weight: var(--fw-medium); }
   .case-hero .lead { font-size: var(--fs-lead); color: var(--fg-soft); max-width: 60ch; margin: 0 auto; line-height: var(--lh-snug); }
   .hero-shot {
-    margin-top: var(--space-16); aspect-ratio: 16/8; border-radius: var(--radius-lg); overflow: hidden;
+    margin-top: var(--space-16); aspect-ratio: 2000/1660; border-radius: var(--radius-lg); overflow: hidden;
     background: linear-gradient(135deg, var(--color-peri-300), var(--color-clay-300) 60%, var(--color-green-300));
     box-shadow: var(--shadow-lg); position: relative;
   }
+  .hero-shot img { width:100%; height:100%; object-fit:cover; display:block; }
   .ph-label {
     position: absolute; left: var(--space-6); bottom: var(--space-6); color:#fff;
     font-family: var(--font-mono); font-size: var(--fs-caption); letter-spacing: var(--tracking-wide);
@@ -204,6 +205,26 @@
   /* media */
   .media { aspect-ratio: 16/9; border-radius: var(--radius-lg); overflow:hidden; position:relative; border:1px solid var(--color-line); background: linear-gradient(135deg, var(--color-peri-300), var(--color-green-300)); }
   .media.wide { aspect-ratio: 21/9; }
+  .media img { width:100%; height:100%; object-fit:cover; display:block; }
+
+  /* sitemap before/after slider */
+  .ba-figure.phone { width: min(300px, 100%); justify-self: center; }
+  .ba-tags { display:flex; justify-content:space-between; gap: var(--space-2); margin-bottom: var(--space-3); }
+  .ba-tag { font-family: var(--font-mono); font-size: var(--fs-caption); letter-spacing: var(--tracking-wide); text-transform:uppercase; color:#fff; padding: var(--space-1) var(--space-3); border-radius: var(--radius-pill); }
+  .ba-tag.b { background: var(--accent); }
+  .ba-tag.a { background: var(--accent-2); }
+  .ba { position:relative; aspect-ratio: 4/3; border-radius: var(--radius-lg); overflow:hidden; border:1px solid var(--color-line); background: var(--color-surface); --pos:50%; }
+  .ba img { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; padding: clamp(var(--space-4), 3vw, var(--space-12)); pointer-events:none; user-select:none; }
+  .ba .ba-before { clip-path: inset(0 calc(100% - var(--pos)) 0 0); }
+  .ba .ba-after { clip-path: inset(0 0 0 var(--pos)); }
+  .ba .ba-divider { position:absolute; top:0; bottom:0; left: var(--pos); width:2px; margin-left:-1px; background: var(--accent); z-index:3; pointer-events:none; }
+  .ba .ba-handle { position:absolute; top:50%; left: var(--pos); transform: translate(-50%,-50%); z-index:4; width:42px; height:42px; border-radius:50%; background: var(--accent); color:#fff; display:flex; align-items:center; justify-content:center; font-size: 1.1rem; box-shadow: var(--shadow-md); pointer-events:none; }
+  .ba .ba-range { position:absolute; inset:0; width:100%; height:100%; margin:0; padding:0; opacity:0; cursor: ew-resize; z-index:5; }
+  /* phone-shaped slider for matched mobile pairs */
+  .ba-figure.phone .ba { aspect-ratio: 390 / 844; background: var(--color-ink); }
+  .ba-figure.phone .ba img { object-fit:cover; padding:0; }
+  .pair-stack > .annotate + .annotate { margin-top: var(--space-32); }
+  .pair-block .pair-title { font-size: var(--fs-h3); font-weight: var(--fw-semibold); margin-bottom: var(--space-6); }
 
   /* cta + footer */
   .case-cta { border-top: 1px solid var(--color-line); text-align: center; padding-block: var(--space-32); }
@@ -248,7 +269,7 @@
   <h1 class="reveal">Designing trust through information architecture</h1>
   <p class="lead reveal">A redesign of Etsy's iOS buyer experience — restructuring information so shoppers can find what matters faster and feel confident enough to buy.</p>
   <div class="hero-shot reveal">
-    <span class="ph-label">Hero mockup — replace with project image</span>
+    <img src="images/etsy-hero.jpg" alt="Etsy iOS redesign — phone mockups">
   </div>
 </header>
 
@@ -394,8 +415,8 @@
     <blockquote>Trust, not discovery, became the primary design problem. Etsy users are willing to invest more time and money for unique products when they feel confident in what they're buying.</blockquote>
   </div>
 
-  <div class="media wide reveal" style="margin-top: var(--space-16);">
-    <span class="ph-label">Persona &amp; supporting research artifacts</span>
+  <div class="media reveal" style="margin-top: var(--space-16); aspect-ratio: 1968/1344;">
+    <img src="images/etsy-persona.png" alt="User persona and supporting research artifacts">
   </div>
 </section>
 
@@ -450,8 +471,15 @@
     </div>
   </div>
 
-  <div class="media wide reveal" style="margin-top: var(--space-16);">
-    <span class="ph-label">Before / after sitemap comparison</span>
+  <div class="ba-figure reveal" style="margin-top: var(--space-16);">
+    <div class="ba-tags"><span class="ba-tag b">Before</span><span class="ba-tag a">After</span></div>
+    <div class="ba">
+      <img class="ba-before" src="images/sitemap-before.png" alt="Sitemap before — fragmented across multiple destinations">
+      <img class="ba-after" src="images/sitemap-after.png" alt="Sitemap after — consolidated structure">
+      <div class="ba-divider" aria-hidden="true"></div>
+      <div class="ba-handle" aria-hidden="true">⇆</div>
+      <input class="ba-range" type="range" min="0" max="100" value="50" aria-label="Drag to compare the before and after sitemap">
+    </div>
   </div>
 </section>
 
@@ -459,22 +487,72 @@
 <div class="phase-head alt reveal"><span class="section-label">Phase 04</span><h2>Redesign</h2></div>
 
 <section class="wrap">
-  <div class="two-col lean reveal" style="align-items:start;">
-    <div class="prose">
-      <h3 class="sub">Guided discovery</h3>
-      <p>Many users knew what they wanted but struggled to determine how to search for it. To reduce "blank canvas" friction, keyword-driven search suggestions were introduced directly within the search experience.</p>
-    </div>
-    <div class="prose guided-col">
-      <span class="section-label">This supported both</span>
-      <ul class="ul">
-        <li>Intent-driven shoppers</li>
-        <li>Inspiration-driven browsers</li>
-      </ul>
-      <p style="color:var(--fg-soft); margin:0;">…with immediate entry points into relevant categories and products.</p>
-    </div>
+  <div class="reveal" style="margin-bottom: var(--space-16); max-width: 60ch;">
+    <span class="section-label">Guided discovery</span>
+    <h2 class="sec" style="max-width: 22ch;">Reducing the "blank canvas" moment</h2>
+    <p style="color:var(--fg-soft);">Many users knew what they wanted but struggled to figure out how to search for it. Keyword-driven suggestions were introduced directly in the search experience so everyone starts with direction.</p>
   </div>
-  <div class="media reveal" style="margin-top: var(--space-16);">
-    <span class="ph-label">Search flow examples</span>
+
+  <div class="pair-stack">
+    <div class="annotate reveal pair-block">
+      <div class="ba-figure phone">
+        <div class="ba-tags"><span class="ba-tag b">Before</span><span class="ba-tag a">After</span></div>
+        <div class="ba">
+          <img class="ba-before" src="images/pair-1-before.png" alt="Product page — before">
+          <img class="ba-after" src="images/pair-1-after.png" alt="Product page — after">
+          <div class="ba-divider" aria-hidden="true"></div>
+          <div class="ba-handle" aria-hidden="true">⇆</div>
+          <input class="ba-range" type="range" min="0" max="100" value="50" aria-label="Drag to compare before and after">
+        </div>
+      </div>
+      <div>
+        <h4 class="pair-title">A clearer path to discovery</h4>
+        <ul class="anno-list">
+          <li class="anno-item"><span class="b">1</span><div><h4>Clarifying location</h4><p>Shop and Explore were condensed into a single header, so every path to discovering new goods sits in one place the user can reach quickly.</p><span class="gain">→ Creates ease in discovering new content</span></div></li>
+          <li class="anno-item"><span class="b">2</span><div><h4>Keywords to break the blank canvas</h4><p>Keyword pills sit directly under the new header, centering a discovery mindset — letting people search relevant content by behavior while surfacing new suggestions.</p><span class="gain">→ Replaces the empty search box with instant, behavior-driven starting points</span></div></li>
+          <li class="anno-item"><span class="b">3</span><div><h4>Breathing room in the bottom nav</h4><p>The simplified bottom nav drops the Shop and Explore tabs, focusing it on actions tied directly to the user and giving that space a clearer, more personal purpose.</p><span class="gain">→ A calmer nav focused on the user, not competing destinations</span></div></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="annotate reveal pair-block">
+      <div class="ba-figure phone">
+        <div class="ba-tags"><span class="ba-tag b">Before</span><span class="ba-tag a">After</span></div>
+        <div class="ba">
+          <img class="ba-before" src="images/pair-2-before.png" alt="Seller & reviews — before">
+          <img class="ba-after" src="images/pair-2-after.png" alt="Seller & reviews — after">
+          <div class="ba-divider" aria-hidden="true"></div>
+          <div class="ba-handle" aria-hidden="true">⇆</div>
+          <input class="ba-range" type="range" min="0" max="100" value="50" aria-label="Drag to compare before and after">
+        </div>
+      </div>
+      <div>
+        <h4 class="pair-title">Harmony across the experience</h4>
+        <ul class="anno-list">
+          <li class="anno-item"><span class="b">1</span><div><h4>Personality, kept harmonious</h4><p>To support visual harmony between the home and discover pages, the blue header was repurposed as a mid-page feature section that draws the user down the page.</p><span class="gain">→ A unified experience that eases mental load</span></div></li>
+          <li class="anno-item"><span class="b">2</span><div><h4>Keeping the keywords</h4><p>The keyword pills carry through to this section too, nudging people to keep exploring the content.</p><span class="gain">→ Reinforces the user's desire to find new content</span></div></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="annotate reveal pair-block">
+      <div class="ba-figure phone">
+        <div class="ba-tags"><span class="ba-tag b">Before</span><span class="ba-tag a">After</span></div>
+        <div class="ba">
+          <img class="ba-before" src="images/pair-3-before.png" alt="Layout & hierarchy — before">
+          <img class="ba-after" src="images/pair-3-after.png" alt="Layout & hierarchy — after">
+          <div class="ba-divider" aria-hidden="true"></div>
+          <div class="ba-handle" aria-hidden="true">⇆</div>
+          <input class="ba-range" type="range" min="0" max="100" value="50" aria-label="Drag to compare before and after">
+        </div>
+      </div>
+      <div>
+        <h4 class="pair-title">Reinforcing the new patterns</h4>
+        <ul class="anno-list">
+          <li class="anno-item"><span class="b">1</span><div><h4>Leveraging new patterns</h4><p>Adding the keywords here reinforces these terms and doubles as a quick search as people find content they enjoy.</p><span class="gain">→ Builds a consistent, learnable way to browse by interest</span></div></li>
+        </ul>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -486,12 +564,15 @@
   </div>
 
   <div class="annotate reveal">
-    <div class="anno-media">
-      <span class="ph-label">Product page before / after</span>
-      <span class="marker" style="top:16%; left:10%;">1</span>
-      <span class="marker" style="top:34%; left:10%;">2</span>
-      <span class="marker" style="top:52%; left:10%;">3</span>
-      <span class="marker" style="top:72%; left:10%;">4</span>
+    <div class="ba-figure phone">
+      <div class="ba-tags"><span class="ba-tag b">Before</span><span class="ba-tag a">After</span></div>
+      <div class="ba">
+        <img class="ba-before" src="images/product-page-before.png" alt="Product page — before">
+        <img class="ba-after" src="images/product-page-after.png" alt="Product page — after">
+        <div class="ba-divider" aria-hidden="true"></div>
+        <div class="ba-handle" aria-hidden="true">⇆</div>
+        <input class="ba-range" type="range" min="0" max="100" value="50" aria-label="Drag to compare the product page before and after">
+      </div>
     </div>
     <ul class="anno-list">
       <li class="anno-item">
@@ -531,13 +612,36 @@
 </section>
 
 <section class="wrap">
+  <div class="reveal" style="margin-bottom: var(--space-16); max-width: 60ch;">
+    <span class="section-label">Creating a scannable cart</span>
+    <h2 class="sec" style="max-width: 22ch;">Restructuring the cart to support ease</h2>
+    <p style="color:var(--fg-soft);">Often, people use the cart to manage what they're interested in rather than what they intend to purchase. The page was rebuilt to put scannability and visuals at the forefront.</p>
+  </div>
+
+  <div class="annotate reveal">
+    <div class="ba-figure phone">
+      <div class="ba-tags"><span class="ba-tag b">Before</span><span class="ba-tag a">After</span></div>
+      <div class="ba">
+        <img class="ba-before" src="images/cart-before.png" alt="Cart — before">
+        <img class="ba-after" src="images/cart-after.png" alt="Cart — after">
+        <div class="ba-divider" aria-hidden="true"></div>
+        <div class="ba-handle" aria-hidden="true">⇆</div>
+        <input class="ba-range" type="range" min="0" max="100" value="50" aria-label="Drag to compare the cart before and after">
+      </div>
+    </div>
+    <ul class="anno-list">
+      <li class="anno-item"><span class="b">1</span><div><h4>Pulling images forward</h4><p>Larger product images help people remember and quickly see what they've added — and act as a visual reminder when they return to the cart after a while.</p><span class="gain">→ Quicker to recognize what's in the cart, even after time away</span></div></li>
+      <li class="anno-item"><span class="b">2</span><div><h4>Information transparency</h4><p>A larger area for quantity, per-item total, and shipping dates pulls forward the information people identified as key.</p><span class="gain">→ Surfaces the details that matter, cutting hesitation before checkout</span></div></li>
+      <li class="anno-item"><span class="b">3</span><div><h4>Vibrancy for engagement</h4><p>Overall color on the checkout page was dialed up to make the experience more lively and inviting.</p><span class="gain">→ A more engaging path to purchase</span></div></li>
+    </ul>
+  </div>
+</section>
+
+<section class="wrap">
   <div class="reveal" style="max-width:60ch;">
     <span class="section-label">Visual design</span>
     <h2 class="sec">Modern, familiar, and built for accessibility</h2>
     <p style="color:var(--fg-soft);">The visual system was updated to match current social media and e-commerce design trends, using styles that users already know from other platforms. Typography, color, and component design were refined to create a unified, accessible experience that feels natural on iOS and modern — while still keeping Etsy's warmth and character.</p>
-  </div>
-  <div class="media wide reveal" style="margin-top: var(--space-16);">
-    <span class="ph-label">Visual design / UI components</span>
   </div>
 </section>
 
@@ -673,6 +777,14 @@
   const nav = document.querySelector('nav.top');
   const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 8);
   onScroll(); window.addEventListener('scroll', onScroll, { passive: true });
+
+  // Before/after sitemap slider
+  document.querySelectorAll('.ba').forEach(ba => {
+    const range = ba.querySelector('.ba-range');
+    const apply = () => ba.style.setProperty('--pos', range.value + '%');
+    range.addEventListener('input', apply);
+    apply();
+  });
 </script>
 </body>
 </html>

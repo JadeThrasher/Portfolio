@@ -60,6 +60,7 @@
     background: linear-gradient(135deg, var(--color-peri-500), var(--color-green-300) 60%, var(--color-clay-300));
     box-shadow: var(--shadow-lg); position: relative;
   }
+  .hero-shot img { width:100%; height:100%; object-fit:cover; display:block; }
   .ph-label {
     position: absolute; left: var(--space-6); bottom: var(--space-6); color:#fff;
     font-family: var(--font-mono); font-size: var(--fs-caption); letter-spacing: var(--tracking-wide);
@@ -144,12 +145,10 @@
   .car-btn { width:40px; height:40px; border-radius:50%; border:1px solid var(--color-line); background: var(--color-surface); color: var(--fg); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size: var(--fs-h4); line-height:1; transition: color var(--dur-fast), border-color var(--dur-fast); }
   .car-btn:hover { color: var(--accent); border-color: var(--accent); }
   .car-track { display:flex; gap: var(--space-6); overflow-x:auto; scroll-snap-type:x mandatory; scroll-behavior:smooth; padding-bottom: var(--space-3); scrollbar-width: thin; }
-  .car-slide { flex:0 0 clamp(280px, 80%, 460px); scroll-snap-align:start; }
-  .persona-media { aspect-ratio: 4/3; border-radius: var(--radius-lg); border:1px solid var(--color-line); position:relative; overflow:hidden; background: linear-gradient(135deg, var(--color-peri-300), var(--color-green-300)); }
-  .car-slide:nth-child(2) .persona-media { background: linear-gradient(135deg, var(--color-peri-300), var(--color-clay-300)); }
-  .car-slide:nth-child(3) .persona-media { background: linear-gradient(135deg, var(--color-green-500), var(--color-peri-300)); }
-  .car-slide:nth-child(4) .persona-media { background: linear-gradient(135deg, var(--color-clay-500), var(--color-peri-500)); }
-  .car-slide .cap { margin-top: var(--space-3); }
+  .car-slide { flex:0 0 100%; scroll-snap-align:start; }
+  .persona-media { aspect-ratio: 1554 / 874; border-radius: var(--radius-lg); border:1px solid var(--color-line); position:relative; overflow:hidden; background: var(--color-ink); }
+  .persona-media img { width:100%; height:100%; object-fit:cover; display:block; }
+  .car-slide .cap { margin-top: var(--space-4); }
   .car-slide .cap .t { font-family: var(--font-display); font-weight: var(--fw-semibold); font-size: var(--fs-h4); }
   .car-slide .cap .s { color: var(--color-ink-muted); font-size: var(--fs-small); }
 
@@ -250,7 +249,7 @@
   <h1 class="reveal">Creating clarity through exploration</h1>
   <p class="lead reveal">A four-month discovery and strategy engagement for Activate Games — evaluating whether a native mobile app was the right investment, and uncovering where the real opportunities for growth were.</p>
   <div class="hero-shot reveal">
-    <span class="ph-label">Hero mockup — replace with project image</span>
+    <img src="images/activate-hero.png" alt="Activate Games app — hero mockup">
   </div>
 </header>
 
@@ -553,19 +552,19 @@
     </div>
     <div class="car-track">
       <div class="car-slide">
-        <div class="persona-media"><span class="ph-label">Persona 01</span></div>
+        <div class="persona-media"><img src="images/Persona-01.png" alt="Persona — Kesha Robinson, party planner"></div>
         <div class="cap"><div class="t">The Achiever</div><div class="s">Driven by progress, badges &amp; leaderboards</div></div>
       </div>
       <div class="car-slide">
-        <div class="persona-media"><span class="ph-label">Persona 02</span></div>
+        <div class="persona-media"><img src="images/Persona-02.png" alt="Persona 2"></div>
         <div class="cap"><div class="t">The Socializer</div><div class="s">Comes for shared experiences &amp; events</div></div>
       </div>
       <div class="car-slide">
-        <div class="persona-media"><span class="ph-label">Persona 03</span></div>
+        <div class="persona-media"><img src="images/Persona-03.png" alt="Persona 3"></div>
         <div class="cap"><div class="t">The Competitor</div><div class="s">Motivated by rankings &amp; head-to-head play</div></div>
       </div>
       <div class="car-slide">
-        <div class="persona-media"><span class="ph-label">Persona 04</span></div>
+        <div class="persona-media"><img src="images/Persona-04.png" alt="Persona 4"></div>
         <div class="cap"><div class="t">The Explorer</div><div class="s">Seeks novelty, challenges &amp; hidden finds</div></div>
       </div>
     </div>
